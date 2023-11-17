@@ -13,7 +13,6 @@ module DomainModels =
         | Priority
         | Credit
         
-    
     type Transaction = {
         Id: string
         Card: Card
@@ -29,9 +28,9 @@ module DomainModels =
         UserId: string
         TypeCard: TypeOfCard
         Balance: int
-        Transactions: Transaction option
+        Transactions: List<Transaction> option
         LifeTime: DateTime
-        isActive: TypeOfActivation
+        Status: TypeOfActivation
     }
 
     type User = {
@@ -42,5 +41,5 @@ module DomainModels =
         Age: int
         Salary: int
         Email: string
-        Cards: Card[] option
+        Cards: List<Card[]> option
     }

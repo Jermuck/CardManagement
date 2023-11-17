@@ -8,6 +8,8 @@
 
     <ItemGroup>
       <Compile Include="DomainModels.fs" />
+      <Compile Include="CardActions.fs" />
+      <Compile Include="UserActions.fs" />
     </ItemGroup>
 
 </Project>
