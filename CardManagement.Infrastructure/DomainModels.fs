@@ -6,7 +6,7 @@ module DomainModels =
     
     type TypeOfActivation =
         | Activate
-        | Deactivate
+        | Deactivate 
         
     type TypeOfCard =
         | Basic
