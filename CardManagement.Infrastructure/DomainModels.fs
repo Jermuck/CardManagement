@@ -11,21 +11,20 @@ module DomainModels =
     type TypeOfCard =
         | Basic
         | Priority
-        | Credit
         
     type Transaction = {
-        Id: string
-        Card: Card
+        Id: Guid
+        CardId: Guid
         CreateDate: DateTime
         Sum: int
-        To: string
+        ToUserId: Guid
     }
         
-    and Card = {
-        Id: string
+    type Card = {
+        Id: Guid
         Code: int
         CVV: int
-        UserId: string
+        UserId: Guid
         TypeCard: TypeOfCard
         Balance: int
         Transactions: List<Transaction> option
@@ -34,7 +33,7 @@ module DomainModels =
     }
 
     type User = {
-        Id: string
+        Id: Guid
         Name: string
         Surname: string
         Patronymic: string
