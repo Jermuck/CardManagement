@@ -47,5 +47,5 @@ module CardActions =
             if isExpired then Error "This card has expired"
             else
                 match isBalance with
-                | Some currentBalance -> makeTransaction card currentBalance toUserId |> Ok
+                | Some currentBalance -> makeTransaction {card with Balance = currentBalance } amount toUserId |> Ok
                 | None -> Error "Insufficient funds on the card"
