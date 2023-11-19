@@ -6,7 +6,7 @@ open CardManagement.Infrastructure.CardActions
 let main _ =
     let card = {
         Id = Guid.NewGuid()
-        Code = 444
+        Code = 442
         CVV = 444
         UserId = Guid.NewGuid()
         TypeCard = Priority
