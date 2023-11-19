@@ -22,7 +22,7 @@ module DomainModels =
         
     type Card = {
         Id: Guid
-        Code: int
+        Code: int32
         CVV: int
         UserId: Guid
         TypeCard: TypeOfCard
