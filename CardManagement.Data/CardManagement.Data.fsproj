@@ -6,4 +6,17 @@
     </PropertyGroup>
 
 
+    <ItemGroup>
+      <Compile Include="Configuration.fs" />
+      <Folder Include="Migrations\" />
+      <Compile Include="MigrationsRunner.fs" />
+    </ItemGroup>
+
+
+    <ItemGroup>
+      <PackageReference Include="dbup" Version="5.0.37" />
+      <PackageReference Include="dbup-postgresql" Version="5.0.37" />
+      <PackageReference Include="Npgsql.FSharp" Version="5.7.0" />
+    </ItemGroup>
+
 </Project>
