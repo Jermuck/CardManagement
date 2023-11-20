@@ -3,6 +3,7 @@
     <PropertyGroup>
         <OutputType>Exe</OutputType>
         <TargetFramework>net7.0</TargetFramework>
+        <RootNamespace>Console</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
@@ -11,5 +12,6 @@
     
     <ItemGroup>
         <ProjectReference Include="../CardManagement.Infrastructure/CardManagement.Infrastructure.fsproj"/>
+        <ProjectReference Include="../CardManagement.Data/CardManagement.Data.fsproj"/>
     </ItemGroup>
 </Project>
