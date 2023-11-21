@@ -7,16 +7,16 @@
 
 
     <ItemGroup>
-      <Compile Include="Configuration.fs" />
-      <Folder Include="Migrations\" />
-      <Compile Include="MigrationsRunner.fs" />
+      <Compile Include="DatabaseContext.fs" />
+      <Compile Include="ConnectionOptions.fs" />
     </ItemGroup>
 
 
     <ItemGroup>
-      <PackageReference Include="dbup" Version="5.0.37" />
-      <PackageReference Include="dbup-postgresql" Version="5.0.37" />
+      <PackageReference Include="EntityFrameworkCore.FSharp" Version="6.0.7" />
+      <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="6.0.22" />
       <PackageReference Include="Npgsql.FSharp" Version="5.7.0" />
     </ItemGroup>
+
 
 </Project>
