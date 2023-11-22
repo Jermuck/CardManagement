@@ -2,8 +2,8 @@ namespace CardManagement.Data
 
 module DatabaseContext =
     open System.ComponentModel.DataAnnotations
-    open EntityFrameworkCore.FSharp.Extensions
     open Microsoft.EntityFrameworkCore
+    open CardManagement.Data.DatabaseConfiguration
     
     [<CLIMutable>]
     type Blog = {
@@ -18,4 +18,4 @@ module DatabaseContext =
         member this.Blogs with get() = this.blogs and set v = this.blogs <- v
         
         override __.OnConfiguring(options: DbContextOptionsBuilder) : unit =
-            options.UseNpgsql("Server=localhost;Username=postgres;Password=postgres;Database=t") |> ignore
+            options.UseNpgsql("host=localhost; port=5432; database=t; username=postgres; password=postgres") |> ignore

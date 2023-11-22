@@ -7,15 +7,18 @@
 
 
     <ItemGroup>
+      <Compile Include="DatabaseConfiguration.fs" />
       <Compile Include="DatabaseContext.fs" />
-      <Compile Include="ConnectionOptions.fs" />
+      <Compile Include="Migrations/*.fs" />
+      <Content Include="appsettings.json" />
     </ItemGroup>
 
 
     <ItemGroup>
       <PackageReference Include="EntityFrameworkCore.FSharp" Version="6.0.7" />
-      <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="6.0.22" />
-      <PackageReference Include="Npgsql.FSharp" Version="5.7.0" />
+      <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.0" />
+      <PackageReference Update="FSharp.Core" Version="8.0.100" />
+      <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="6.0.1" />
     </ItemGroup>
 
 
