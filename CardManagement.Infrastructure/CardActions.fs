@@ -42,7 +42,7 @@ module CardActions =
             UserId = userId
             TypeCard = typeCard
             Balance = balance
-            Transactions = None
+            Transactions = []
             LifeTime = lifeTime
             Status = Activate 
         }
@@ -56,18 +56,13 @@ module CardActions =
             CreateDate = DateTime.Now
             ToUserId = toId 
         }
-        match card.Transactions with
-        | None -> {card with Transactions = Some [newTransaction] }
-        | Some transactions -> {card with Transactions = Some ([newTransaction] |> List.append transactions)}
+        {card with Transactions = [newTransaction] |> List.append card.Transactions }
     
     let private getPossiblyTransaction (card: Card) (amount: int) =
-        match card.Transactions with
-        | Some transactions -> 
-            let transactionsSum = getTransactionsSum transactions
-            match card.TypeCard with
-            | Priority -> transactionsSum + amount <= 300_000
-            | Basic -> transactionsSum + amount <= 100_000
-        | None -> true
+        let transactionsSum = getTransactionsSum card.Transactions
+        match card.TypeCard with
+        | Priority -> transactionsSum + amount <= 300_000
+        | Basic -> transactionsSum + amount <= 100_000
     
     let processPayment (card: Card) (amount: int) (toUserId: Guid) =
         match card.Status with
