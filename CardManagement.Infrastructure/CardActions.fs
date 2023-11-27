@@ -1,5 +1,6 @@
 namespace CardManagement.Infrastructure
 
+
 module CardActions =
     open System
     open CardManagement.Infrastructure.DomainModels
@@ -29,7 +30,7 @@ module CardActions =
         if remnant >= 0 then Some remnant
         else None
     
-    let buildCard (userId: Guid) (typeCard: TypeOfCard) (balance: int) =
+    let buildCard (user: User) (typeCard: TypeOfCard) (balance: int) =
         let random = Random()
         let code = Math.Abs(random.Next(100_000_000, 999_999_999) * 1000)
         let CVV = random.Next(100, 999)
@@ -39,7 +40,7 @@ module CardActions =
             Id = id
             Code = code
             CVV = CVV
-            UserId = userId
+            User = user
             TypeCard = typeCard
             Balance = balance
             Transactions = []
@@ -51,7 +52,7 @@ module CardActions =
     let private makeTransaction (card: Card) (sumTransaction: int) (toId: Guid) =
         let newTransaction = {
             Id = toId
-            CardId = card.Id
+            Card = card
             Sum = sumTransaction
             CreateDate = DateTime.Now
             ToUserId = toId 
