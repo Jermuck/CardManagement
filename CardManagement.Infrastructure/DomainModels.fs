@@ -10,21 +10,19 @@ module DomainModels =
         | Basic
         | Priority
         
-    [<CLIMutable>]    
     type Transaction = {
         Id: Guid
-        CardId: Guid
+        Card: Card
         CreateDate: DateTime
         Sum: int
         ToUserId: Guid
     }
     
-    [<CLIMutable>]
-    type Card = {
+    and Card = {
         Id: Guid
         Code: int32
         CVV: int
-        UserId: Guid
+        User: User
         TypeCard: TypeOfCard
         Balance: int
         Transactions: Transaction list
@@ -32,8 +30,7 @@ module DomainModels =
         Status: TypeOfActivation
     }
     
-    [<CLIMutable>]
-    type User = {
+    and User = {
         Id: Guid
         Name: string
         Surname: string

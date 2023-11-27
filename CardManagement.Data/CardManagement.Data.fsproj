@@ -7,6 +7,8 @@
 
 
     <ItemGroup>
+      <Compile Include="DatabaseModels.fs" />
+      <Compile Include="Mappers.fs" />
       <Compile Include="DatabaseConfiguration.fs" />
       <Compile Include="DatabaseContext.fs" />
       <Compile Include="Migrations/*.fs" />
