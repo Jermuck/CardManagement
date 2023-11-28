@@ -1,8 +1,6 @@
 namespace CardManagement.Data
 
 open CardManagement.Data.DatabaseModels
-open CardManagement.Infrastructure.DomainModels
-
 
 module DatabaseContext =
     open Microsoft.EntityFrameworkCore
@@ -24,11 +22,3 @@ module DatabaseContext =
             options.UseNpgsql(databaseConnectionString)
                 .UseFSharpTypes() |> ignore
         
-        override _.OnModelCreating (builder: ModelBuilder) =
-            builder.Entity<DBCard>()
-                .Property(fun e -> e.Status)
-                .HasColumnName("Status")
-                .HasConversion<string>() |> ignore
-            
-            builder.Entity<DBCard>()
-                .Property(fun e -> e.TypeCard)

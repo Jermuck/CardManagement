@@ -1,7 +1,5 @@
 namespace CardManagement.Data
 
-open CardManagement.Infrastructure.DomainModels
-
 module DatabaseModels =
     open System
     
@@ -20,8 +18,8 @@ module DatabaseModels =
         CVV: int
         User: DBUser
         Balance: int
-        TypeCard: TypeOfCard
-        Status: TypeOfActivation
+        TypeCard: string
+        Status: string
         Transactions: DBTransaction ResizeArray
         LifeTime: DateTime
     }

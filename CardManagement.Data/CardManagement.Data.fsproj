@@ -13,7 +13,8 @@
       <Compile Include="DatabaseContext.fs" />
       <Compile Include="Migrations/*.fs" />
       <Content Include="appsettings.json" />
-      <Compile Include="UserRepository.fs" />
+      <Compile Include="UsersRepository.fs" />
+      <Compile Include="CardsRepository.fs" />
     </ItemGroup>
 
 
