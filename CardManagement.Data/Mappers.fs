@@ -3,7 +3,6 @@ namespace CardManagement.Data
 open CardManagement.Data.DatabaseModels
 
 module Mappers =
-   open CardManagement.Data.DatabaseModels
    open CardManagement.Infrastructure.DomainModels
    
    let mapToDatabaseUser (user: User) (mapToDatabaseCard: Card -> DBCard): DBUser  =

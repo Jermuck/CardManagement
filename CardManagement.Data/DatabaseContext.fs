@@ -1,14 +1,12 @@
 namespace CardManagement.Data
 
 open CardManagement.Data.DatabaseModels
-open EntityFrameworkCore.FSharp
+open CardManagement.Infrastructure.DomainModels
 
 
 module DatabaseContext =
     open Microsoft.EntityFrameworkCore
     open CardManagement.Data.DatabaseConfiguration
-    open CardManagement.Data.DatabaseModels
-    open CardManagement.Infrastructure.DomainModels
     open EntityFrameworkCore.FSharp.Extensions
     
     type DatabaseContext() =  
@@ -28,10 +26,9 @@ module DatabaseContext =
         
         override _.OnModelCreating (builder: ModelBuilder) =
             builder.Entity<DBCard>()
-                .Property(fun x -> x.Status)
-                .HasConversion(SingleCaseUnionConverter<int, TypeOfActivation>()) |> ignore
+                .Property(fun e -> e.Status)
+                .HasColumnName("Status")
+                .HasConversion<string>() |> ignore
             
             builder.Entity<DBCard>()
-                .Property(fun x -> x.TypeCard)
-                .HasConversion(SingleCaseUnionConverter<int, TypeOfCard>()) |> ignore
-            
+                .Property(fun e -> e.TypeCard)

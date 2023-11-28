@@ -1,6 +1,5 @@
 namespace CardManagement.Infrastructure
 
-
 module CardActions =
     open System
     open CardManagement.Infrastructure.DomainModels
