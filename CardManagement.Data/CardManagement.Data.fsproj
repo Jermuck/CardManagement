@@ -7,19 +7,13 @@
 
 
     <ItemGroup>
-      <Compile Include="DatabaseModels.fs" />
-      <Compile Include="Mappers.fs" />
-      <Compile Include="DatabaseConfiguration.fs" />
-      <Compile Include="DatabaseContext.fs" />
       <Compile Include="Migrations/*.fs" />
-      <Content Include="appsettings.json" />
-      <Compile Include="UsersRepository.fs" />
-      <Compile Include="CardsRepository.fs" />
+      <Content Include="properties\appsettings.json" />
+      <Content Include="properties\migrondi.json" />
     </ItemGroup>
 
 
     <ItemGroup>
-      <PackageReference Include="EntityFrameworkCore.FSharp" Version="6.0.7" />
       <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.0" />
       <PackageReference Update="FSharp.Core" Version="8.0.100" />
       <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="6.0.1" />

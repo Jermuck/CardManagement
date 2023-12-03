@@ -11,9 +11,9 @@ module CardActions =
     
     let private getTransactionsSum transactions =
         transactions
-        |> List.filter (fun e -> e.CreateDate.Day = DateTime.Now.Day)
-        |> List.map (fun e -> e.Sum)
-        |> List.sum
+        |> Seq.filter (fun e -> e.CreateDate.Day = DateTime.Now.Day)
+        |> Seq.map (fun e -> e.Sum)
+        |> Seq.sum
     
     let activate (card: Card) =
         match card.Status with
@@ -56,7 +56,7 @@ module CardActions =
             CreateDate = DateTime.Now
             ToUserId = toId 
         }
-        {card with Transactions = [newTransaction] |> List.append card.Transactions }
+        {card with Transactions = [newTransaction] |> Seq.append card.Transactions }
     
     let private getPossiblyTransaction (card: Card) (amount: int) =
         let transactionsSum = getTransactionsSum card.Transactions
@@ -66,7 +66,7 @@ module CardActions =
     
     let processPayment (card: Card) (amount: int) (toUserId: Guid) =
         match card.Status with
-        | Deactivate -> Error "Card deactivate"
+        | Deactivate  -> Error "Card deactivate"
         | Activate ->
             let isExpiredCard = getCardExpired card
             let isValidBalanceCard = getValidBalance card amount
