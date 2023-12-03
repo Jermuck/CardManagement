@@ -1,0 +1,5 @@
+{
+  "connection": "server=localhost; database=cardmanagement; username=root; password=12345",
+  "migrationsDir": ".././migrations/",
+  "driver": "postgres"
+}
