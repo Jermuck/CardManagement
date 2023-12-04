@@ -8,15 +8,21 @@
 
     <ItemGroup>
       <Compile Include="Migrations/*.fs" />
-      <Content Include="properties\appsettings.json" />
-      <Content Include="properties\migrondi.json" />
+      <Content Include="Properties\appsettings.json" />
+      <Content Include="Properties\dbup.yml" />
+      <Content Include="Migrations\FirstMigration.sql" />
+      <Content Include="Migrations\002_UpdateCards.sql" />
+      <Compile Include="DatabaseConfiguration.fs" />
+      <Compile Include="Settings.fs" />
     </ItemGroup>
 
 
     <ItemGroup>
+      <PackageReference Include="Dapper.FSharp" Version="4.7.0" />
       <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.0" />
       <PackageReference Update="FSharp.Core" Version="8.0.100" />
       <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="6.0.1" />
+      <PackageReference Include="Npgsql.FSharp" Version="5.7.0" />
     </ItemGroup>
 
     <ItemGroup>

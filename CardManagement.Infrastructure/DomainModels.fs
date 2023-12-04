@@ -13,7 +13,7 @@ module DomainModels =
     [<CLIMutable>]    
     type Transaction = {
         Id: Guid
-        Card: Card
+        CardId: Guid
         CreateDate: DateTime
         Sum: int
         ToUserId: Guid
@@ -23,7 +23,7 @@ module DomainModels =
         Id: Guid
         Code: int32
         CVV: int
-        User: User
+        UserId: Guid
         TypeCard: TypeOfCard
         Balance: int
         Transactions: Transaction seq
@@ -31,7 +31,7 @@ module DomainModels =
         Status: TypeOfActivation
     }
     
-    and [<CLIMutable>] User = {
+    and User = {
         Id: Guid
         Name: string
         Surname: string
@@ -39,5 +39,4 @@ module DomainModels =
         Age: int
         Salary: int
         Email: string
-        Cards: Card seq
     }

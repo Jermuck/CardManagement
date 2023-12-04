@@ -1,8 +1,8 @@
 open System
-open CardManagement.Data.UsersRepository
+open System.Threading.Tasks
 open CardManagement.Infrastructure.DomainModels
 open CardManagement.Infrastructure.CardActions
-
+open CardManagement.Data.DatabaseConfiguration
 [<EntryPoint>]
 let main _ =
     let mockUser: User = {
@@ -13,8 +13,8 @@ let main _ =
        Age = 30
        Salary = 50000
        Email = "john.doe@example.com"
-       Cards = []
     }
     let card = buildCard mockUser Basic 100
-    let t = createUser {mockUser with Cards = [card] }
+    let users = selectUsers() |> Task.WaitAll
+    printfn "%A" users
     0 
