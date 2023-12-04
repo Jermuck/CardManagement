@@ -1,9 +1,9 @@
 version: "3.9"
 
 services:
-  ps:
+  db:
     image: postgres:15.3
-    container_name: ps
+    container_name: db
     restart: always
     ports:
       - 5432:5432
