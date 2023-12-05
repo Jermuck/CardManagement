@@ -1,31 +1,25 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
-    <PropertyGroup>
-        <TargetFramework>net7.0</TargetFramework>
-        <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    </PropertyGroup>
-
-
-    <ItemGroup>
-      <Compile Include="Migrations/*.fs" />
-      <Content Include="Properties\appsettings.json" />
-      <Content Include="Properties\dbup.yml" />
-      <Content Include="Migrations\FirstMigration.sql" />
-      <Content Include="Migrations\002_UpdateCards.sql" />
-      <Compile Include="DatabaseConfiguration.fs" />
-      <Compile Include="Settings.fs" />
-    </ItemGroup>
-
-
-    <ItemGroup>
-      <PackageReference Include="Dapper.FSharp" Version="4.7.0" />
-      <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.0" />
-      <PackageReference Update="FSharp.Core" Version="8.0.100" />
-      <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="6.0.1" />
-      <PackageReference Include="Npgsql.FSharp" Version="5.7.0" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <ProjectReference Include="../CardManagement.Infrastructure/CardManagement.Infrastructure.fsproj"/>
-    </ItemGroup>
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="SqlHydraTypes.fs">
+      <Visible>False</Visible>
+    </Compile>
+    <Compile Include="test">
+      <Visible>False</Visible>
+    </Compile>
+    <Content Include="Properties\appsettings.json" />
+    <Compile Include="Program.fs" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.0" />
+    <PackageReference Update="FSharp.Core" Version="8.0.100" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="6.0.1" />
+    <PackageReference Include="SqlHydra.Query" Version="2.2.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="../CardManagement.Infrastructure/CardManagement.Infrastructure.fsproj" />
+  </ItemGroup>
 </Project>

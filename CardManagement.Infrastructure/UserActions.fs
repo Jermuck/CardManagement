@@ -1,8 +1,8 @@
 namespace CardManagement.Infrastructure
 
-open CardManagement.Infrastructure.DomainModels
 
 module UserActions =
+    open CardManagement.Infrastructure.DomainModels
     
     let buildUser (user: User) =
         0
