@@ -1,7 +1,9 @@
 namespace CardManagement.Infrastructure
 
+open System
+
 module DomainModels =
-    open System
+    
     type TypeOfActivation =
         | Activate
         | Deactivate 
@@ -10,28 +12,27 @@ module DomainModels =
         | Basic
         | Priority
         
-    [<CLIMutable>]    
     type Transaction = {
         Id: Guid
-        Card: Card
+        CardId: Guid
         CreateDate: DateTime
         Sum: int
         ToUserId: Guid
     }
-    
-    and [<CLIMutable>] Card = {
+        
+    and Card = {
         Id: Guid
         Code: int32
         CVV: int
-        User: User
+        UserId: Guid
         TypeCard: TypeOfCard
         Balance: int
         Transactions: Transaction seq
         LifeTime: DateTime
         Status: TypeOfActivation
     }
-    
-    and [<CLIMutable>] User = {
+
+    and User = {
         Id: Guid
         Name: string
         Surname: string
