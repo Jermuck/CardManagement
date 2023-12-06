@@ -33,12 +33,12 @@ module private DataReaderExtensions =
 
 module ``public`` =
     type typeofcard =
-        | Basic = 1
-        | Priority = 2
+        | basic = 1
+        | priority = 2
 
     type statusofcard =
-        | Activate = 1
-        | Deactivate = 2
+        | activate = 1
+        | deactivate = 2
 
     [<CLIMutable>]
     type cards =
