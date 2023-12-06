@@ -8,9 +8,9 @@ CREATE TABLE users(
     email varchar(255) NOT NULL UNIQUE 
 );
 
-CREATE TYPE typeOfCard AS ENUM ('Basic', 'Priority');
+CREATE TYPE typeOfCard AS ENUM ('basic', 'priority');
 
-CREATE TYPE statusOfCard AS ENUM ('Activate', 'Deactivate');
+CREATE TYPE statusOfCard AS ENUM ('activate', 'deactivate');
 
 CREATE TABLE cards(
     id uuid PRIMARY KEY,
