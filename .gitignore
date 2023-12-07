@@ -2,3 +2,4 @@ bin/
 obj/
 .idea/
 .git/
+postgres-data/
