@@ -1,4 +1,14 @@
 ﻿open System
+open Microsoft.AspNetCore.Builder
+open Microsoft.AspNetCore.Hosting
+open CardManagement.API.ServerConfiguration
+
 [<EntryPoint>]
 let main _ =
-    0
+     WebHostBuilder()
+        .UseKestrel()
+        .Configure(Action<IApplicationBuilder> configureApp)
+        .ConfigureServices(configureServices)
+        .Build()
+        .Run()
+     0
