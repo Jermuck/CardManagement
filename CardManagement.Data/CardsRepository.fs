@@ -2,7 +2,6 @@ namespace CardManagement.Data
 
 open System
 open CardManagement.Data.``public``
-open CardManagement.Data.``public``
 
 module CardsRepository =
     open CardManagement.Data.DatabaseContext

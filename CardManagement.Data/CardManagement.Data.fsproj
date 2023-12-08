@@ -11,9 +11,10 @@
     </Compile>
     <Content Include="Properties\appsettings.json" />
     <Content Include="Properties\sqlhydra-npgsql.toml" />
-    <Compile Include="Repository.fs" />
     <Compile Include="Settings.fs" />
-    <Content Include="Makefile" />
+    <Compile Include="DatabaseContext.fs" />
+    <Compile Include="UsersRepository.fs" />
+    <Compile Include="CardsRepository.fs" />
   </ItemGroup>
   
   <ItemGroup>
