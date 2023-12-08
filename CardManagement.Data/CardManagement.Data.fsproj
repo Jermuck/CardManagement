@@ -13,19 +13,17 @@
     <Content Include="Properties\sqlhydra-npgsql.toml" />
     <Compile Include="Settings.fs" />
     <Compile Include="DatabaseContext.fs" />
+    <Compile Include="Mappers.fs" />
     <Compile Include="UsersRepository.fs" />
     <Compile Include="CardsRepository.fs" />
   </ItemGroup>
   
   <ItemGroup>
-    <PackageReference Include="Microsoft.Data.SqlClient" Version="5.1.2" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.0" />
     <PackageReference Update="FSharp.Core" Version="8.0.100" />
     <PackageReference Include="SqlHydra.Query" Version="2.2.1" />
     <PackageReference Include="SqlKata" Version="2.4.0" />
     <PackageReference Include="Npgsql" Version="8.0.1" />
-    <PackageReference Remove="Microsoft.Extensions.DependencyInjection.Abstractions" />
-    <PackageReference Remove="Microsoft.Extensions.Logging.Abstractions" />
   </ItemGroup>
   
   <ItemGroup>

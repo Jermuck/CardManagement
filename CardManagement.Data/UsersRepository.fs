@@ -6,9 +6,10 @@ module UsersRepository =
     open CardManagement.Data.DatabaseContext
     open CardManagement.Data.``public``
     open System.Threading.Tasks
+    open CardManagement.Data.Mappers
     open System
     
-    let tryFindUserById (email: string): Task<users option> = task {
+    let tryFindUserByEmail (email: string): Task<users option> = task {
         let! users = selectTask HydraReader.Read (Create openContext) {
             for user in users do
             where (user.email = email)
@@ -19,18 +20,11 @@ module UsersRepository =
         | false -> return Some (Seq.item 0 users)
     }
     
-    let createUser (user: User) =
+    let saveUser (user: User) =
+        let dbUser = convertUserToDB user
         insertTask (Create openContext) {
             into users
-            entity {
-                id = user.Id
-                name = user.Name
-                surname = user.Surname
-                patronymic = user.Patronymic
-                salary = user.Salary
-                age = user.Age
-                email = user.Email
-            }
+            entity dbUser
         }
 
 
