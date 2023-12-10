@@ -2,25 +2,18 @@ namespace CardManagement.API
 
 open System
 open CardManagement.API.SharedTypes
+open CardManagement.Infrastructure.InputTypes
 
 module UsersController =
     open CardManagement.Data.UsersRepository
     open CardManagement.Infrastructure.DomainModels
+    open CardManagement.Infrastructure.UserActions
     
-    let register (user: UserDTO): Async<Result<User>> = async {
-        let! isSomeUser = tryFindUserByEmail user.Email |> Async.AwaitTask
+    let register (inputUser: InputUser): Async<Result<User>> = async {
+        let! isSomeUser = tryFindUserByEmail inputUser.Email |> Async.AwaitTask
         if isSomeUser.IsSome then return Error { message = "User with this email already exist" }
         else
-            let user = {
-                Id = Guid.NewGuid()
-                Name = "John"
-                Surname = "Doe"
-                Patronymic = "Smith"
-                Age = 30
-                Salary = 50000
-                Email = "john.doe@exampl.com"
-                Cards = [] 
-            }
+            let user = buildUser inputUser 
             saveUser user |> Async.AwaitTask |> ignore
             return Ok user
     }

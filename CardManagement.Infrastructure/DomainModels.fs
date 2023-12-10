@@ -1,8 +1,8 @@
 namespace CardManagement.Infrastructure
 
-open System
 
 module DomainModels =
+    open System
     
     type TypeOfActivation =
         | Activate
