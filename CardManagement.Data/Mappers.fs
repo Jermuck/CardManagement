@@ -29,6 +29,18 @@ module Mappers =
             email = user.Email
         }
     
+    let convertDBUserToDomain (user: users) =
+        {
+            Id = user.id
+            Name = user.name
+            Surname = user.surname
+            Patronymic = user.patronymic
+            Salary = user.salary
+            Age = user.age
+            Email = user.email
+            Cards = [] 
+        }
+    
     let convertCardToDB (card: Card) =
         let type_card = convertTypeOfCard card.TypeCard
         let status = convertStatusOfCard card.Status

@@ -1,6 +1,5 @@
 namespace CardManagement.Infrastructure
 
-
 module DomainModels =
     open System
     
@@ -42,3 +41,8 @@ module DomainModels =
         Email: string
         Cards: Card seq
     }
+    
+    type Token = {
+        Token: string
+    }
+    
