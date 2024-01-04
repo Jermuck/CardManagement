@@ -1,7 +1,5 @@
 namespace CardManagement.API
 
-open CardManagement.Infrastructure.DomainModels
-
 module UserStore =
     open CardManagement.Infrastructure.InputTypes
     open CardManagement.Data.UsersRepository

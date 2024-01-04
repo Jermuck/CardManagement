@@ -4,7 +4,7 @@ module Settings =
     open Microsoft.Extensions.Configuration
     
     let configService = ConfigurationBuilder()
-                            .SetBasePath("/Users/irinabardugova/Desktop/CardManagement/CardManagement.Data/Properties")
+                            .SetBasePath("/Users/kirillbardugov/Desktop/Projects/fcs/CardManagement/CardManagement.Data/Properties")
                             .AddJsonFile("appsettings.json", true, true)
                             .Build()
     

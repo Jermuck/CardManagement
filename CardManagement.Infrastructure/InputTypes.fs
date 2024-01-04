@@ -6,6 +6,7 @@ module InputTypes =
         Name: string
         Surname: string
         Patronymic: string
+		Password: string
         Age: int
         Salary: int
         Email: string

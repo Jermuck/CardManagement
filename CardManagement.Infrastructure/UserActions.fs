@@ -11,6 +11,7 @@ module UserActions =
             Name = inputUser.Name
             Surname = inputUser.Surname
             Patronymic = inputUser.Patronymic
+			Password = inputUser.Password
             Age = inputUser.Age
             Salary = inputUser.Salary
             Email = inputUser.Email
