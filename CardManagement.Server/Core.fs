@@ -1,7 +1,7 @@
-﻿open System
-open Microsoft.AspNetCore.Builder
+﻿module CardManagement.Server.Core
+
 open Microsoft.AspNetCore.Hosting
-open CardManagement.API.ServerConfiguration
+open CardManagement.Server.ServerConfiguration
 open Microsoft.Extensions.Hosting
 
 let ConfigureWebHost (webHostBuilder: IWebHostBuilder) =

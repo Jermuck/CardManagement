@@ -10,20 +10,21 @@
         <Compile Include="Password.fs" />
         <Compile Include="ConfigService.fs" />
         <Compile Include="JWT.fs" />
-        <Compile Include="SharedTypes.fs" />
         <Compile Include="UsersStore.fs" />
         <Compile Include="ServerConfiguration.fs" />
-        <Compile Include="Program.fs" />
+        <Compile Include="Core.fs" />
     </ItemGroup>
     
     <ItemGroup>
-        <ProjectReference Include="../CardManagement.Data/CardManagement.Data.fsproj" />
+        <ProjectReference Include="..\CardManagement.Database\CardManagement.Database.fsproj" />
         <ProjectReference Include="../CardManagement.Infrastructure/CardManagement.Infrastructure.fsproj"/>
     </ItemGroup>
     
     <ItemGroup>
-      <PackageReference Include="Fable.Remoting.Giraffe" Version="5.17.0" />
+      <PackageReference Include="Fable.Remoting.Giraffe" Version="5.18.0" />
       <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.14" />
       <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.0" />
+      <PackageReference Update="FSharp.Core" Version="8.0.100" />
+      <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     </ItemGroup>
 </Project>

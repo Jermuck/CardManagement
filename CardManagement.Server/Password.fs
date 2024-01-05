@@ -21,7 +21,7 @@ module Password =
         else
             let mutable areEqual = true
             for i = 0 to a.Length - 1 do
-                areEqual <- areEqual && (a.[i] = b.[i])
+                areEqual <- areEqual && (a.[i] = b[i])
             areEqual
 
     let private writeNetworkByteOrder (buffer:byte []) (offset:int) (value:uint32) =
@@ -32,10 +32,10 @@ module Password =
         ()
 
     let private readNetworkByteOrder (buffer:byte []) offset =
-        (buffer.[offset + 0] |> uint32 <<< 24)
-        ||| (buffer.[offset + 1] |> uint32 <<< 16)
-        ||| (buffer.[offset + 2] |> uint32 <<< 8)
-        ||| (buffer.[offset + 3] |> uint32)
+        (buffer[offset + 0] |> uint32 <<< 24)
+        ||| (buffer[offset + 1] |> uint32 <<< 16)
+        ||| (buffer[offset + 2] |> uint32 <<< 8)
+        ||| (buffer[offset + 3] |> uint32)
 
     let createHash password =
         let rng = RandomNumberGenerator.Create()

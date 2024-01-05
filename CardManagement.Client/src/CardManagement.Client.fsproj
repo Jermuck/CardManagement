@@ -1,24 +1,25 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
+    <RootNamespace>App</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Content Include="styles.css" />
     <None Include="index.html" />
-    <Compile Include="../../CardManagement.Infrastructure/DomainModels.fs" />
-    <Compile Include="../../CardManagement.Infrastructure/InputTypes.fs"/>
-    <Compile Include="../../CardManagement.API/SharedTypes.fs" />
-    <Compile Include="Server.fs" />
-    <Compile Include="Components.fs" />
-    <Compile Include="Pages\Auth.fs" />
     <Compile Include="Extensions.fs" />
+    <Compile Include="WebApi.fs" />
+    <Compile Include="Components.fs" />
+    <Compile Include="Auth.fs" />
     <Compile Include="Routes.fs" />
     <Compile Include="Main.fs" />
-    <Content Include="styles.css" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Fable.Remoting.Client" Version="7.29.0" />
-    <PackageReference Include="Feliz" Version="2.6.0" />
+    <PackageReference Include="Feliz" Version="2.8.0-beta.0" />
     <PackageReference Include="Feliz.Bulma" Version="3.0.0" />
     <PackageReference Include="Feliz.Router" Version="4.0.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\CardManagement.Shared\CardManagement.Shared.fsproj" />
   </ItemGroup>
 </Project>

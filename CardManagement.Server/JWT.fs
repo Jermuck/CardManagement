@@ -7,7 +7,7 @@ module JWT =
     open CardManagement.API.ConfigService
     open System.Security.Claims
     open System.Text
-    open CardManagement.Infrastructure.DomainModels
+    open CardManagement.Shared.Types
     
     let key = getValue "AppSettings:Key"
     let issuer = getValue "AppSettings:Issuer"

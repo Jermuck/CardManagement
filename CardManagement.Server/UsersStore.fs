@@ -1,14 +1,14 @@
 namespace CardManagement.API
 
 module UserStore =
-    open CardManagement.Infrastructure.InputTypes
     open CardManagement.Data.UsersRepository
-    open CardManagement.API.SharedTypes
+    open CardManagement.Shared.Types
+    open CardManagement.Shared.Core
     open CardManagement.Infrastructure.UserActions
     open CardManagement.API.JWT
     open CardManagement.API.Password
     
-    let private register (inputUser: InputUser): Async<Result<RegistrationResponse>> = async {
+    let private register inputUser = async {
         let! isExistUser = tryFindUserByEmail inputUser.Email |> Async.AwaitTask
         if isExistUser.IsSome then return Error { Message = "User with this email already exist" }
         else
@@ -24,10 +24,12 @@ module UserStore =
         return "hello"
     }
     
-    let privateStoreImplementation = {
+    let privateStoreImplementation: IPrivateStore = {
         Get = getMyProfile
     }
     
-    let usersStoreImplementation = {
-        Register = register 
+    let usersStoreImplementation: IUsersStore = {
+        Register = fun _ -> async {
+            return Error { Message = "User with this email already exist" }
+        }  
     }
