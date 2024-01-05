@@ -100,7 +100,9 @@ module ``public`` =
           [<SqlHydra.ProviderDbType("Integer")>]
           salary: int
           [<SqlHydra.ProviderDbType("Varchar")>]
-          email: string }
+          email: string
+          [<SqlHydra.ProviderDbType("Varchar")>]
+          password: string }
 
     let users = SqlHydra.Query.Table.table<users>
 
@@ -166,6 +168,7 @@ module ``public`` =
             member __.age = RequiredColumn(reader, getOrdinal, reader.GetInt32, "age")
             member __.salary = RequiredColumn(reader, getOrdinal, reader.GetInt32, "salary")
             member __.email = RequiredColumn(reader, getOrdinal, reader.GetString, "email")
+            member __.password = RequiredColumn(reader, getOrdinal, reader.GetString, "password")
 
             member __.Read() =
                 { users.id = __.id.Read()
@@ -174,7 +177,8 @@ module ``public`` =
                   patronymic = __.patronymic.Read()
                   age = __.age.Read()
                   salary = __.salary.Read()
-                  email = __.email.Read() }
+                  email = __.email.Read()
+                  password = __.password.Read() }
 
             member __.ReadIfNotNull() =
                 if __.id.IsNull() then None else Some(__.Read())
@@ -195,7 +199,7 @@ type HydraReader(reader: Npgsql.NpgsqlDataReader) =
     let lazypubliccards = lazy (``public``.Readers.cardsReader (reader, buildGetOrdinal 8))
     let lazypublicschemaversions = lazy (``public``.Readers.schemaversionsReader (reader, buildGetOrdinal 3))
     let lazypublictransactions = lazy (``public``.Readers.transactionsReader (reader, buildGetOrdinal 5))
-    let lazypublicusers = lazy (``public``.Readers.usersReader (reader, buildGetOrdinal 7))
+    let lazypublicusers = lazy (``public``.Readers.usersReader (reader, buildGetOrdinal 8))
     member __.``public.cards`` = lazypubliccards.Value
     member __.``public.schemaversions`` = lazypublicschemaversions.Value
     member __.``public.transactions`` = lazypublictransactions.Value

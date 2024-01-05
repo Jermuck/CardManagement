@@ -2,13 +2,18 @@
 open Microsoft.AspNetCore.Builder
 open Microsoft.AspNetCore.Hosting
 open CardManagement.API.ServerConfiguration
+open Microsoft.Extensions.Hosting
+
+let ConfigureWebHost (webHostBuilder: IWebHostBuilder) =
+    webHostBuilder
+        .Configure(configureApp)
+        .ConfigureServices(configureServices)
+        |> ignore
 
 [<EntryPoint>]
-let main _ =
-     WebHostBuilder()
-        .UseKestrel()
-        .Configure(Action<IApplicationBuilder> configureApp)
-        .ConfigureServices(configureServices)
+let Main _ =
+    Host.CreateDefaultBuilder()
+        .ConfigureWebHostDefaults(ConfigureWebHost)
         .Build()
         .Run()
-     0
+    0

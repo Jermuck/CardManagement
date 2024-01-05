@@ -5,11 +5,11 @@
   <ItemGroup>
     <None Include="index.html" />
     <Compile Include="../../CardManagement.Infrastructure/DomainModels.fs" />
-    <Compile Include="../../CardManagement.API/SharedTypes.fs" />
     <Compile Include="../../CardManagement.Infrastructure/InputTypes.fs"/>
+    <Compile Include="../../CardManagement.API/SharedTypes.fs" />
+    <Compile Include="Server.fs" />
     <Compile Include="Components.fs" />
     <Compile Include="Pages\Auth.fs" />
-    <Compile Include="Server.fs" />
     <Compile Include="Extensions.fs" />
     <Compile Include="Routes.fs" />
     <Compile Include="Main.fs" />

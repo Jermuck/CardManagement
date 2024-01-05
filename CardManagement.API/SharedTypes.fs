@@ -18,3 +18,7 @@ module SharedTypes =
         Register: InputUser -> Async<Result<RegistrationResponse>>
     }
     
+    type IPrivateStore = {
+        Get: unit -> Async<string>
+    }
+    

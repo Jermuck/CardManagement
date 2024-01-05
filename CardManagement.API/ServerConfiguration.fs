@@ -1,5 +1,9 @@
 namespace CardManagement.API
 
+open System
+open Microsoft.AspNetCore.Cors.Infrastructure
+open Microsoft.AspNetCore.Http
+
 module ServerConfiguration =
     open Fable.Remoting.Server
     open Fable.Remoting.Giraffe
@@ -21,19 +25,25 @@ module ServerConfiguration =
         |> Remoting.buildHttpHandler
     
     //let authenticate =
-      //  requiresAuthentication (RequestErrors.UNAUTHORIZED JwtBearerDefaults.AuthenticationScheme "" "User not logged in")
+      //  requiresAuthentication (challenge JwtBearerDefaults.AuthenticationScheme)
     
-    let webApp =
+    let webApi: HttpFunc -> HttpContext -> HttpFuncResult =
         [
-            createHandler usersStoreImplementation 
+            createHandler privateStoreImplementation
+            createHandler usersStoreImplementation
         ] |> choose
     
+    let UseCors (builder: CorsPolicyBuilder) =
+        builder
+            .AllowAnyOrigin()
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            |> ignore
+
     let configureApp (app : IApplicationBuilder) =
-        app.UseCors(fun builder ->
-               builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader() |> ignore
-            ) |> ignore
+        app.UseCors(Action<_> UseCors) |> ignore
         app.UseAuthentication() |> ignore
-        app.UseGiraffe webApp
+        app.UseGiraffe webApi
         
 
     let configureServices (services : IServiceCollection) =

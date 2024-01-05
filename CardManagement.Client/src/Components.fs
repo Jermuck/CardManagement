@@ -5,20 +5,23 @@ module Components =
     open Feliz
     open CardManagement.Infrastructure.DomainModels
     
-    type InputType =
-        | Number
-        | Text
-        | Email
-    
-    let rec Input (placeholder: string) (label: string) (type': InputType) onInput =
+    let InputText (placeholder: string) (label: string) (onInput: string -> unit) =
         Bulma.field.div [
             Bulma.label label
             Bulma.input.text [
-                prop.type' (type'.ToString())
-                prop.min 0
                 prop.placeholder placeholder
-                prop.onInput onInput
+                prop.onChange onInput
             ]
         ]
-        
+    
+    let InputNumber (placeholder: string) (label: string) (onInput: int -> unit) =
+        Bulma.field.div [
+            Bulma.label label
+            Bulma.input.number [
+                prop.min 0
+                prop.placeholder placeholder
+                prop.onChange onInput
+            ]
+        ]
+           
 

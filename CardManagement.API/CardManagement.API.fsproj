@@ -7,6 +7,7 @@
 
     <ItemGroup>
         <Content Include="Properties\appsettings.json" />
+        <Compile Include="Password.fs" />
         <Compile Include="ConfigService.fs" />
         <Compile Include="JWT.fs" />
         <Compile Include="SharedTypes.fs" />
