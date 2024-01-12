@@ -10,7 +10,10 @@
         <Compile Include="Password.fs" />
         <Compile Include="ConfigService.fs" />
         <Compile Include="JWT.fs" />
+        <Compile Include="RemotingUtils.fs" />
         <Compile Include="UsersStore.fs" />
+        <Compile Include="ProfileStore.fs" />
+        <Compile Include="CardsStore.fs" />
         <Compile Include="ServerConfiguration.fs" />
         <Compile Include="Core.fs" />
     </ItemGroup>

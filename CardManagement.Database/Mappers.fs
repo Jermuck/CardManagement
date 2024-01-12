@@ -7,17 +7,29 @@ open System
 let private convertTimeToDateOnly (time: DateTime) =
    DateOnly(time.Year, time.Month, time.Hour) 
 
-let private convertTypeOfCard (typeCard: TypeOfCard) =
+let private mapTypeOfCardToDB (typeCard: TypeOfCard) =
     match typeCard with
     | Basic -> typeofcard.basic
     | Priority -> typeofcard.priority
 
-let private convertStatusOfCard (status: TypeOfActivation) =
+let private mapStatusOfCardToDB (status: TypeOfActivation) =
     match status with
     | Activate -> statusofcard.activate
     | Deactivate -> statusofcard.deactivate
 
-let convertUserToDB (user: User) =
+let private mapTypeOfCardToDomain (typeCard: typeofcard) =
+    match typeCard with
+    | typeofcard.basic -> Basic
+    | typeofcard.priority -> Priority
+    | _ -> Basic
+
+let private mapStatusOfCardToDomain (status: statusofcard) =
+    match status with
+    | statusofcard.activate -> Activate
+    | statusofcard.deactivate -> Deactivate
+    | _ -> Deactivate
+
+let mapUserToDB (user: User) =
     {
         id = user.Id
         name = user.Name
@@ -29,7 +41,7 @@ let convertUserToDB (user: User) =
         email = user.Email
     }
 
-let convertDBUserToDomain (user: users) =
+let mapDBUserToDomain (user: users) =
     {
         Id = user.id
         Name = user.name
@@ -42,9 +54,9 @@ let convertDBUserToDomain (user: users) =
         Cards = [] 
     }
 
-let convertCardToDB (card: Card) =
-    let type_card = convertTypeOfCard card.TypeCard
-    let status = convertStatusOfCard card.Status
+let mapCardToDB (card: Card) =
+    let type_card = mapTypeOfCardToDB card.TypeCard
+    let status = mapStatusOfCardToDB card.Status
     let lifeTime = convertTimeToDateOnly card.LifeTime
     {
             id = card.Id
@@ -56,8 +68,23 @@ let convertCardToDB (card: Card) =
             life_time = lifeTime
             status = status
     }
+
+let mapDBCardToDomain (card: cards) =
+    let typeCard = mapTypeOfCardToDomain card.type_card
+    let status = mapStatusOfCardToDomain card.status
+    {
+        Id = card.id
+        Code = card.code
+        CVV = card.cvv
+        UserId = card.user_id
+        TypeCard = typeCard
+        Balance = card.balance
+        LifeTime = DateTime.Now
+        Status = status
+        Transactions = [] 
+    }
     
-let convertTransactionToDB (transaction: Transaction) =
+let mapTransactionToDB (transaction: Transaction) =
     let date = convertTimeToDateOnly transaction.CreateDate
     {
         id = transaction.Id

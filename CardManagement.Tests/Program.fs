@@ -1,8 +1,4 @@
-open System
 open CardManagement.Data.UsersRepository
-open CardManagement.Data.CardsRepository
-open CardManagement.Shared.Types
-open CardManagement.Infrastructure.CardActions
 
 [<EntryPoint>]
 let main _ =

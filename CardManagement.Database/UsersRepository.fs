@@ -8,7 +8,7 @@ open System.Threading.Tasks
 open SqlHydra.Query
 open System
 
-let tryFindUserByEmail (email: string): Task<users option> = task {
+let tryFindUserByEmail (email: string): Task<User option> = task {
     let! users = selectTask HydraReader.Read (Create openContext) {
         for user in users do
         where (user.email = email)
@@ -16,11 +16,22 @@ let tryFindUserByEmail (email: string): Task<users option> = task {
     }
     match Seq.isEmpty users with
     | true -> return None
-    | false -> return Some (Seq.item 0 users)
+    | false -> return Seq.item 0 users |> mapDBUserToDomain |> Some
+}
+
+let tryFindUserById (id: Guid): Task<User option> = task {
+    let! users = selectTask HydraReader.Read (Create openContext) {
+        for user in users do
+        where (user.id = id)
+        select user
+    }
+    match Seq.isEmpty users with
+    | true -> return None
+    | false -> return Seq.item 0 users |> mapDBUserToDomain |> Some 
 }
 
 let saveUser (user: User) =
-    let dbUser = convertUserToDB user
+    let dbUser = mapUserToDB user
     insertTask (Create openContext) {
         into users
         entity dbUser

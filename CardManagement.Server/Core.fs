@@ -4,16 +4,16 @@ open Microsoft.AspNetCore.Hosting
 open CardManagement.Server.ServerConfiguration
 open Microsoft.Extensions.Hosting
 
-let ConfigureWebHost (webHostBuilder: IWebHostBuilder) =
-    webHostBuilder
-        .Configure(configureApp)
-        .ConfigureServices(configureServices)
-        |> ignore
-
 [<EntryPoint>]
-let Main _ =
+let main _ =
     Host.CreateDefaultBuilder()
-        .ConfigureWebHostDefaults(ConfigureWebHost)
+        .ConfigureWebHostDefaults(fun webHostBuilder ->
+            webHostBuilder
+                .Configure(configureApp)
+                .UseUrls("http://localhost:5123")
+                .ConfigureServices(configureServices)
+                |> ignore
+            )
         .Build()
         .Run()
     0

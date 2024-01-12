@@ -12,7 +12,7 @@
         </Compile>
         <Content Include="Properties\appsettings.json"/>
         <Content Include="Properties\sqlhydra-npgsql.toml"/>
-        <Content Include="Migrations/*.fs"/>
+        <Content Include="Migrations/*.sql"/>
         <Compile Include="Settings.fs"/>
         <Compile Include="DatabaseContext.fs"/>
         <Compile Include="Mappers.fs"/>

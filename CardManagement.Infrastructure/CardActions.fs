@@ -6,7 +6,7 @@ open Microsoft.FSharp.Core
 
 let deactivate (card: Card) =
     match card.Status with
-    | Activate -> {card with Status = Deactivate }
+    | Activate -> { card with Status = Deactivate }
     | Deactivate -> card
 
 let activate (card: Card) =
@@ -22,7 +22,11 @@ let private getValidBalance (card: Card) (sum: int) =
     let remnant = card.Balance - sum
     if remnant >= 0 then Some remnant
     else None
-
+    
+let getIsAvailableCard (user: User) =
+    if user.Salary >= 100_000 then seq [ Priority; Basic ]
+    else [ Basic ]
+    
 let buildCard (user: User) (typeCard: TypeOfCard) (balance: int) =
     let random = Random()
     let code = Math.Abs(random.Next(100_000_000, 999_999_999) * 1000)
@@ -50,7 +54,7 @@ let private makeTransaction (card: Card) (sumTransaction: int) (toId: Guid) =
         CreateDate = DateTime.Now
         ToUserId = toId 
     }
-    {card with Transactions = [newTransaction] |> Seq.append card.Transactions }
+    { card with Transactions = [newTransaction] |> Seq.append card.Transactions }
 
 let private getTransactionsSum transactions =
     transactions

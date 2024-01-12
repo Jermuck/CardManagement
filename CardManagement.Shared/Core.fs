@@ -1,11 +1,17 @@
 ﻿module CardManagement.Shared.Core
 
-open Types
+open CardManagement.Shared.Types
 
 type IUsersStore = {
     Register: InputUser -> Async<ResponseResult<RegistrationResponse>>
+    Login: string -> string -> Async<ResponseResult<RegistrationResponse>>
 }
 
-type IPrivateStore = {
-    Get: unit -> Async<string>
+type ICardsStore = {
+    Get: unit -> Async<ResponseResult<Card seq>>
+    Create: TypeOfCard -> Async<ResponseResult<Card>>
+}
+
+type IProfileStore = {
+    GetMyProfile: unit -> Async<ResponseResult<User>>
 }

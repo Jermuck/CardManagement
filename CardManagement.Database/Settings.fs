@@ -1,9 +1,13 @@
 module CardManagement.Data.Settings
 
+open System.IO
 open Microsoft.Extensions.Configuration
 
+let currentDirectory = Directory.GetCurrentDirectory()
+let path = Path.GetFullPath(currentDirectory).Replace("Server", "Database")
+
 let configService = ConfigurationBuilder()
-                        .SetBasePath("/Users/kirillbardugov/Desktop/Projects/fcs/CardManagement/CardManagement.Data/Properties")
+                        .SetBasePath(path + "/Properties")
                         .AddJsonFile("appsettings.json", true, true)
                         .Build()
 

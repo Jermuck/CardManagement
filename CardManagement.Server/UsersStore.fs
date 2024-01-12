@@ -1,14 +1,14 @@
-namespace CardManagement.API
+module CardManagement.Server.UserStore
 
-module UserStore =
-    open CardManagement.Data.UsersRepository
-    open CardManagement.Shared.Types
-    open CardManagement.Shared.Core
-    open CardManagement.Infrastructure.UserActions
-    open CardManagement.API.JWT
-    open CardManagement.API.Password
-    
-    let private register inputUser = async {
+open CardManagement.Data.UsersRepository
+open CardManagement.Shared.Types
+open CardManagement.Shared.Core
+open CardManagement.Infrastructure.UserActions
+open CardManagement.Server.JWT
+open CardManagement.Server.Password
+
+let register inputUser = async {
+    try
         let! isExistUser = tryFindUserByEmail inputUser.Email |> Async.AwaitTask
         if isExistUser.IsSome then return Error { Message = "User with this email already exist" }
         else
@@ -18,18 +18,27 @@ module UserStore =
             let token = userToToken userWithUpdateHashPassword
             saveUser userWithUpdateHashPassword |> Async.AwaitTask |> ignore
             return Ok (user, token)
-    }
-    
-    let getMyProfile() = async {
-        return "hello"
-    }
-    
-    let privateStoreImplementation: IPrivateStore = {
-        Get = getMyProfile
-    }
-    
-    let usersStoreImplementation: IUsersStore = {
-        Register = fun _ -> async {
-            return Error { Message = "User with this email already exist" }
-        }  
-    }
+    with
+        | ex -> printfn "%A" ex; return Error { Message = "Server error" }
+}
+
+let private login email password: Async<ResponseResult<RegistrationResponse>> = async {
+    try
+        let! isExistUser = tryFindUserByEmail email |> Async.AwaitTask
+        if isExistUser.IsNone then return Error { Message = $"User with %s{email} not found" }
+        else
+            let user = isExistUser.Value
+            let isValidPassword = verifyPassword user.Password password
+            match isValidPassword with
+            | false -> return Error { Message = "Not valid password" }
+            | true ->
+                let token = userToToken user
+                return Ok (user, token)
+    with
+        | ex -> printfn "%A" ex; return Error { Message = "Server error" }
+}
+
+let usersStoreImplementation: IUsersStore = {
+    Register = register
+    Login = login
+}
