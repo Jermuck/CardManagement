@@ -5,10 +5,13 @@ open CardManagement.Shared.RouteBuilders
 open Fable.Remoting.Client
 
 let inline CreateApiProxy<'a> () =
+    let token = "Bearer " + Browser.WebStorage.localStorage.getItem("token")
     Remoting.createApi()
-    |> Remoting.withBaseUrl "http://localhost:5000"
+    |> Remoting.withAuthorizationHeader token
+    |> Remoting.withBaseUrl "http://localhost:5123"
     |> Remoting.withRouteBuilder BuildApiRoute 
     |> Remoting.buildProxy<'a>
 
-let privateStore = CreateApiProxy<IPrivateStore>()
 let userStore = CreateApiProxy<IUsersStore>()    
+let profileStore = CreateApiProxy<IProfileStore>()
+let cardsStore = CreateApiProxy<ICardsStore>()

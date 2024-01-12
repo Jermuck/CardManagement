@@ -1,6 +1,45 @@
 @import "https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css";
-
+@import "../node_modules/bulma-timeline/dist/css/bulma-timeline.min.css";
 * {
     margin: 0;
     padding: 0;
+}
+
+.card_basic {
+    width: 343px;
+    height: 193px;
+    border-radius: 12px;
+    display: flex;
+    justify-content: flex-end;
+    background: radial-gradient(197.17% 76.15% at 98.96% 40.08%, #0063FF 0%, #0055DC 100%), radial-gradient(174.79% 84% at 4.02% 29.7%, #FF7A00 0%, rgba(255, 122, 0, 0.00) 100%), #49B1FF;
+    overflow: hidden;
+}
+.card_priority {
+    width: 343px;
+    height: 193px;
+    border-radius: 12px;
+    display: flex;
+    justify-content: flex-end;
+    background: black;
+    overflow: hidden;
+}
+
+.rectangle {
+    width: 200px;
+    height: 500000px;
+    border-radius: 11000px 0px 0px 0px;
+    background: #49B1FF;
+}
+.card_form:hover {
+    border: 2px solid rgb(61, 112, 255);
+    transition: 0.1s;
+}
+
+.error {
+    opacity: 0;
+    animation: ani 1.5s forwards;
+}
+@keyframes ani {
+    0% {opacity: 0;}
+    100% {opacity: 1;}
 }
