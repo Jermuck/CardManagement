@@ -1,4 +1,4 @@
-module CardManagement.Client.Pages.Loading
+module CardManagement.Client.Pages.LoadingPage
 
 open Feliz
 open Feliz.Bulma

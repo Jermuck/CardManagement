@@ -4,16 +4,16 @@ open CardManagement.Shared.Types
 open Feliz.Bulma
 open Feliz.Router
 open Feliz
-
-type InputType =
-    | Text
-    | Password
+open CardManagement.Client.Types
     
 let navigate (path : string list) =
     path |> Router.formatPath |> Router.navigatePath
 
+let convertCardToPoint (code: string) =
+    "•••• •••• •••• " + code[-4..]
+
 [<ReactComponent>]
-let Input (placeholder: string) (label: string) (type': InputType) (onInput: string -> unit) =
+let InputText (placeholder: string) (label: string) (type': InputType) (onInput: string -> unit) =
     Bulma.field.div [
         Bulma.label label
         Bulma.input.text [
@@ -36,9 +36,6 @@ let InputNumber (placeholder: string) (label: string) (onInput: int -> unit) =
 
 [<ReactComponent>]
 let CardComponent (status: TypeOfCard) =
-    let convertCardToPoint (code: string) =
-        "•••• •••• •••• " + code[-4..]
-    
     let className =
         match status with
         | Basic -> "card_basic"
@@ -111,7 +108,7 @@ let CardComponent (status: TypeOfCard) =
     ]
 
 [<ReactComponent>]
-let TimeLineBank() =
+let TimeLineComponent() =
     let data = [
         "First", "Choose and create the bank card you need";
         "Second", "Replenish and transfer without commission";
@@ -168,6 +165,55 @@ let TimeLineBank() =
                             style.marginRight 30
                         ]
                     ]
+                ]
+            ]
+        ]
+    ]
+    
+[<ReactComponent>]
+let HomeHeaderComponent() =
+    let logout (e: Browser.Types.MouseEvent) =
+        e.preventDefault()
+        Browser.WebStorage.localStorage.removeItem "token"
+        navigate [ "authorization" ]
+        Browser.Dom.window.location.reload()
+    
+    Bulma.navbar [
+        Bulma.color.isLink
+        prop.style [
+            style.backgroundColor "#3D70FF"
+        ]
+        prop.children [
+            Bulma.navbarBrand.div [
+                Bulma.navbarItem.div [
+                     Html.h1 [
+                        prop.text "Bank"
+                        prop.style [
+                            style.color "white"
+                            style.fontWeight 400
+                            style.fontSize 26
+                            style.marginLeft 10
+                        ]
+                    ]
+                ]
+            ]
+            Bulma.navbarMenu [
+                prop.style [
+                    style.marginLeft 40
+                ]
+                prop.children [
+                    Bulma.navbarStart.div [
+                        Bulma.navbarItem.a [ prop.text "Cards" ]
+                        Bulma.navbarItem.a [ prop.text "Transactions" ]
+                        Bulma.navbarItem.a [ prop.text "Settings" ]
+                        Bulma.navbarItem.a [ prop.text "About" ]
+                    ]
+                ]
+            ]
+            Bulma.navbarEnd.div [
+                Bulma.navbarItem.a [
+                    prop.onClick logout
+                    prop.text "Logout"
                 ]
             ]
         ]

@@ -1,16 +1,13 @@
-module CardManagement.Client.Pages.Auth
+module CardManagement.Client.Pages.AuthPage
 
 open CardManagement.Client.Components
 open CardManagement.Shared.Types
 open CardManagement.Shared.Core
 open CardManagement.Client.WebApi
+open CardManagement.Client.Types
 open Feliz.Bulma
 open Microsoft.FSharp.Control
 open Feliz
-
-type TypeAuthorization =
-    | Login
-    | Registration
 
 let private initialStateUser = { Name = ""; Surname = ""; Patronymic = ""; Password = ""; Age = 0; Salary = 0; Email = "" }
 
@@ -84,12 +81,12 @@ let RegistrationForm (setTypeAuthorization: TypeAuthorization -> unit) =
                     style.fontSize 12
                 ]
                 prop.children [
-                    Input "Your name" "Name" Text (fun v -> setUser { user with Name = v }) 
-                    Input "Your surname" "Surname" Text (fun v -> setUser { user with Surname = v })
-                    Input "Your patronymic" "Patronymic" Text (fun v -> setUser { user with Patronymic =  v })
-                    Input "Your email" "Email" Text (fun v -> setUser { user with Email = v })
-                    Input "Your password" "Password" Password (fun v -> setUser { user with Password = v })
-                    Input "Repeat your password" "Repeat Password" Password setRepeatPassword
+                    InputText "Your name" "Name" Text (fun v -> setUser { user with Name = v }) 
+                    InputText "Your surname" "Surname" Text (fun v -> setUser { user with Surname = v })
+                    InputText "Your patronymic" "Patronymic" Text (fun v -> setUser { user with Patronymic =  v })
+                    InputText "Your email" "Email" Text (fun v -> setUser { user with Email = v })
+                    InputText "Your password" "Password" Password (fun v -> setUser { user with Password = v })
+                    InputText "Repeat your password" "Repeat Password" Password setRepeatPassword
                     InputNumber "Your age" "Age" (fun v -> setUser {user with Age = v })
                     InputNumber "Your salary" "Salary" (fun v -> setUser { user with Salary = v })
                     Html.div [
@@ -173,9 +170,9 @@ let LoginForm (setTypeAuthorization: TypeAuthorization -> unit) =
                     style.fontSize 12
                 ]
                 prop.children [
-                    Input "Your email" "Email" Text setEmail
-                    Input "Your password" "Password" Password setPassword
-                    Input "Repeat your password" "Repeat Password" Password setRepeatPassword
+                    InputText "Your email" "Email" Text setEmail
+                    InputText "Your password" "Password" Password setPassword
+                    InputText "Repeat your password" "Repeat Password" Password setRepeatPassword
                     Html.div [
                         prop.style [
                             style.display.flex

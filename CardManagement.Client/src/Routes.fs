@@ -4,28 +4,28 @@ open Feliz
 open Feliz.Router
 open CardManagement.Client.WebApi
 open CardManagement.Shared.Types
-open CardManagement.Client.Pages.Home
-open CardManagement.Client.Pages.Auth
-open CardManagement.Client.Pages.Loading
-open CardManagement.Client.Pages.CreatingCard
+open CardManagement.Client.Pages.HomePage
+open CardManagement.Client.Pages.AuthPage
+open CardManagement.Client.Pages.LoadingPage
+open CardManagement.Client.Pages.CardsPage
 open Feliz.UseDeferred
 
 type Page =
     | Home
     | Auth
     | NotFound
-    | CreateCard
+    | Cards
 
 let private parseUrl = function
     | [ "home" ] -> Page.Home
     | [ "authorization" ] -> Page.Auth
-    | [ "cards"; "create" ] -> Page.CreateCard
+    | [ "cards"; "create" ] -> Page.Cards
     | _ -> NotFound
 
 let private getPrivateRoutes pageUrl =
     match pageUrl with
     | Home -> HomePage()
-    | CreateCard -> CreateCardsPage()
+    | Cards -> CardsPage()
     | _ -> Html.h1 "Not found"
 
 let private getPublicRoutes pageUrl =
@@ -44,7 +44,7 @@ let Router() =
             | Ok _ -> return getPrivateRoutes
             | Error _-> return getPublicRoutes
         with
-            | _ -> return getPublicRoutes
+            | ex -> printfn "%A" ex; return getPublicRoutes
     }
     
     let data = React.useDeferred(getIsAuth(), [||])

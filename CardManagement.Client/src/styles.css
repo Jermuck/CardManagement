@@ -27,7 +27,7 @@
 .rectangle {
     width: 200px;
     height: 500000px;
-    border-radius: 11000px 0px 0px 0px;
+    border-radius: 11000px 0 0 0;
     background: #49B1FF;
 }
 .card_form:hover {

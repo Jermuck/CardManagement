@@ -6,13 +6,14 @@
   <ItemGroup>
     <None Include="index.html" />
     <Content Include="styles.css" />
+    <Compile Include="Types.fs" />
     <Compile Include="Extensions.fs" />
     <Compile Include="WebApi.fs" />
     <Compile Include="Components.fs" />
-    <Compile Include="Pages\Loading.fs" />
-    <Compile Include="Pages\Home.fs" />
-    <Compile Include="Pages\Auth.fs" />
-    <Compile Include="Pages\CreatingCard.fs" />
+    <Compile Include="LoadingPage.fs" />
+    <Compile Include="CardsPage.fs" />
+    <Compile Include="HomePage.fs" />
+    <Compile Include="AuthPage.fs" />
     <Compile Include="Routes.fs" />
     <Compile Include="Main.fs" />
   </ItemGroup>
