@@ -1,6 +1,8 @@
 module CardManagement.Client.Pages.AuthPage
 
-open CardManagement.Client.Components
+open CardManagement.Client.Inputs
+open CardManagement.Client.ErrorComponent
+open CardManagement.Client.Utils
 open CardManagement.Shared.Types
 open CardManagement.Shared.Core
 open CardManagement.Client.WebApi

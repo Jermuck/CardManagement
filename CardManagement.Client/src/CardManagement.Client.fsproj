@@ -9,7 +9,15 @@
     <Compile Include="Types.fs" />
     <Compile Include="Extensions.fs" />
     <Compile Include="WebApi.fs" />
-    <Compile Include="Components.fs" />
+    <Compile Include="Utils.fs" />
+    <Compile Include="Inputs.fs" />
+    <Compile Include="CardComponent.fs" />
+    <Compile Include="TimeLineComponent.fs" />
+    <Compile Include="HomeHeaderComponent.fs" />
+    <Compile Include="ErrorComponent.fs" />
+    <Compile Include="CardFormComponent.fs" />
+    <Compile Include="CardsDashboardComponent.fs" />
+    <Compile Include="HomeBodyComponent.fs" />
     <Compile Include="LoadingPage.fs" />
     <Compile Include="CardsPage.fs" />
     <Compile Include="HomePage.fs" />

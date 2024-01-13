@@ -1,19 +1,20 @@
 module CardManagement.Client.Pages.HomePage
 
+open CardManagement.Client.HomeHeaderComponent
+open CardManagement.Client.TimeLineComponent
 open CardManagement.Shared.Types
 open Feliz
-open CardManagement.Client.Components
 open CardManagement.Client.WebApi
-open CardManagement.Client.Pages.CardsPage
 open Feliz.UseDeferred
 open CardManagement.Client.Pages.LoadingPage
+open CardManagement.Client.HomeBodyComponent
 
 [<ReactComponent>]
 let HomePage() =
     let getComponent data =
         match Seq.isEmpty data with
         | true -> TimeLineComponent()
-        | false -> CardsDashboard data
+        | false -> HomeBodyComponent data
     
     let getCards() = async {
         try
@@ -35,9 +36,9 @@ let HomePage() =
     
     Html.div [
         prop.style [
-            style.height (length.vh 100)
             style.display.flex
             style.flexDirection.column
+            style.height (length.vh 100)
         ]
         prop.children [
             HomeHeaderComponent()
