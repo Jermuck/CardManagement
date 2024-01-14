@@ -61,6 +61,7 @@ let RegistrationForm (setTypeAuthorization: TypeAuthorization -> unit) =
     
     Html.div [
         prop.style [
+            style.height (length.vh 100)
             style.display.flex
             style.flexDirection.column
             style.justifyContent.center

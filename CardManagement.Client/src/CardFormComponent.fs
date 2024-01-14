@@ -10,7 +10,7 @@ let CardFormComponent (props: ICardForm) =
         prop.className "card_form"
         prop.onClick (fun _ -> props.onClick props.TypeCard)
         prop.style [
-            style.width (length.perc 26)
+            style.width 370
             style.cursor.pointer
             style.boxSizing.contentBox
         ]
