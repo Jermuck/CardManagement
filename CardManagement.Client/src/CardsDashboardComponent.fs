@@ -8,7 +8,7 @@ open Feliz.Bulma
 open Feliz
 
 [<ReactComponent>]
-let CardsDashboardComponent (data: Card seq) =
+let CardsDashboardComponent (data: Card seq) (onClick: Guid -> unit) =
     let cards, setCards = React.useState data
     let headers, setHeader = React.useState(seq [
         { Id = Guid.NewGuid(); Text = "All"; ClassName = "is-active"; Type = All }
@@ -88,6 +88,7 @@ let CardsDashboardComponent (data: Card seq) =
             ]
             for card in cards do
                 Bulma.panelBlock.div [
+                    prop.onClick (fun _ -> onClick card.Id)
                     prop.className "is-active"
                     prop.children [
                         Bulma.panelIcon [

@@ -7,12 +7,21 @@ let convertCardToPoint (code: string) =
     "•••• •••• •••• " + code[-4..]
 
 [<ReactComponent>]
-let CardComponent (status: TypeOfCard) =
+let CardComponent (card: Card) =
     
     let className =
-        match status with
+        match card.TypeCard with
         | Basic -> "card_basic"
         | Priority -> "card_priority"
+        
+    let time =
+        let year = card.LifeTime.Year.ToString()[2..]
+        let stringMonth = card.LifeTime.Month.ToString()
+        let updateMonth =
+            match stringMonth.Length > 1 with
+            | true -> stringMonth
+            | false -> "0" + stringMonth
+        updateMonth + "/" + year
     
     Html.div [
         prop.className className
@@ -34,7 +43,7 @@ let CardComponent (status: TypeOfCard) =
                         ]
                     ]
                     Html.h1 [
-                        prop.text "100$"
+                        prop.text (card.Balance.ToString() + "$")
                         prop.style [
                             style.color "#FFF"
                         ]
@@ -52,13 +61,13 @@ let CardComponent (status: TypeOfCard) =
             Html.div [
                 prop.className "rectangle"
                 prop.style [
-                    match status with
+                    match card.TypeCard with
                     | Basic -> style.backgroundColor "#49B1FF"
                     | Priority -> style.backgroundColor "gold"
                 ]
                 prop.children [
                     Html.h1 [
-                        prop.text "../.."
+                        prop.text time
                         prop.style [
                             style.position.absolute
                             style.right 24
@@ -67,7 +76,7 @@ let CardComponent (status: TypeOfCard) =
                         ]
                     ]
                     Html.h1 [
-                        prop.text (convertCardToPoint "4444444444444444")
+                        prop.text (convertCardToPoint(card.Code.ToString()))
                         prop.style [
                             style.position.absolute
                             style.right 24

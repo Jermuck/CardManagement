@@ -11,6 +11,7 @@
     <Compile Include="WebApi.fs" />
     <Compile Include="Utils.fs" />
     <Compile Include="Inputs.fs" />
+    <Compile Include="Chart.fs" />
     <Compile Include="CardComponent.fs" />
     <Compile Include="TimeLineComponent.fs" />
     <Compile Include="HomeHeaderComponent.fs" />
@@ -30,6 +31,7 @@
     <PackageReference Include="Feliz" Version="2.8.0-beta.0" />
     <PackageReference Include="Feliz.Bulma" Version="3.0.0" />
     <PackageReference Include="Feliz.Bulma.Timeline" Version="3.0.0" />
+    <PackageReference Include="Feliz.Recharts" Version="4.2.0" />
     <PackageReference Include="Feliz.Router" Version="4.0.0" />
     <PackageReference Include="Feliz.UseDeferred" Version="2.0.0" />
   </ItemGroup>

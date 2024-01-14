@@ -1,5 +1,6 @@
 module CardManagement.Client.Pages.CardsPage
 
+open System
 open CardManagement.Client.CardFormComponent
 open CardManagement.Client.Utils
 open CardManagement.Client.CardComponent
@@ -17,6 +18,20 @@ let basicCardText = "The Basic Bank Card is a simple and straightforward option 
 [<ReactComponent>]
 let CardsPage() =
     let error, setError = React.useState<IMessage option> None
+    
+    let basicCard: Card = {
+        Id = Guid.NewGuid()
+        Code = 1234
+        CVV = 123
+        UserId = Guid.NewGuid()
+        TypeCard = Basic
+        Balance = 1000
+        Transactions = [] 
+        LifeTime = DateTime.Now
+        Status = Activate
+    }
+    
+    let priorityCard = { basicCard with TypeCard = Priority; Balance = 100000 }
     
     let timeoutCallback _ =
         setError None
@@ -59,14 +74,14 @@ let CardsPage() =
                     | Some error -> ErrorComponent error.Message 20 80 error.Color
                     | None -> Html.none
                     CardFormComponent {
-                        CardElement = (CardComponent Basic)
+                        CardElement = (CardComponent basicCard)
                         TypeCard = Basic
                         TagText = "Basic Bank Card"
                         Content = basicCardText
                         onClick = (fun v -> createCard v |> Async.StartImmediate)
                     } 
                     CardFormComponent {
-                        CardElement = (CardComponent Priority)
+                        CardElement = (CardComponent priorityCard)
                         TypeCard = Priority
                         TagText = "Priority Bank Card"
                         Content =  priorityCardText
