@@ -45,6 +45,8 @@ let HomeBodyComponent (cards: Card seq) =
                                     style.fontSize 18
                                     style.fontWeight 500
                                     style.marginBottom 10
+                                    style.marginTop 10
+                                    style.marginLeft 20
                                 ]
                                 prop.text "Insights"
                             ]

@@ -16,7 +16,7 @@ CREATE TYPE statusOfCard AS ENUM ('activate', 'deactivate');
 CREATE TABLE cards
 (
     id        uuid PRIMARY KEY,
-    code      int          NOT NULL,
+    code      bigint          NOT NULL,
     cvv       int          NOT NULL,
     user_id   uuid         NOT NULL,
     type_card typeOfCard   NOT NULL,

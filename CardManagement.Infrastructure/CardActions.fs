@@ -27,9 +27,15 @@ let getIsAvailableCard (user: User) =
     if user.Salary >= 100_000 then seq [ Priority; Basic ]
     else [ Basic ]
     
+let buildCode() =
+   let random = Random()
+   let code = int64(Math.Abs(random.Next(100_000_000, 999_999_999))).ToString()
+   let endCode = Math.Abs(random.Next(10000, 99999)).ToString()
+   int64(code + endCode)
+   
 let buildCard (user: User) (typeCard: TypeOfCard) (balance: int) =
     let random = Random()
-    let code = Math.Abs(random.Next(100_000_000, 999_999_999) * 1000)
+    let code = buildCode()
     let CVV = random.Next(100, 999)
     let id = Guid.NewGuid()
     let lifeTime = DateTime.Now.AddYears(4)

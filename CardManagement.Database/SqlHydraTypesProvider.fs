@@ -44,8 +44,8 @@ module ``public`` =
     type cards =
         { [<SqlHydra.ProviderDbType("Uuid")>]
           id: System.Guid
-          [<SqlHydra.ProviderDbType("Integer")>]
-          code: int
+          [<SqlHydra.ProviderDbType("Bigint")>]
+          code: int64
           [<SqlHydra.ProviderDbType("Integer")>]
           cvv: int
           [<SqlHydra.ProviderDbType("Uuid")>]
@@ -109,7 +109,7 @@ module ``public`` =
     module Readers =
         type cardsReader(reader: Npgsql.NpgsqlDataReader, getOrdinal) =
             member __.id = RequiredColumn(reader, getOrdinal, reader.GetGuid, "id")
-            member __.code = RequiredColumn(reader, getOrdinal, reader.GetInt32, "code")
+            member __.code = RequiredColumn(reader, getOrdinal, reader.GetInt64, "code")
             member __.cvv = RequiredColumn(reader, getOrdinal, reader.GetInt32, "cvv")
             member __.user_id = RequiredColumn(reader, getOrdinal, reader.GetGuid, "user_id")
             member __.balance = RequiredColumn(reader, getOrdinal, reader.GetInt32, "balance")

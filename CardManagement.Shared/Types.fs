@@ -20,7 +20,7 @@ type Transaction = {
     
 type Card = {
     Id: Guid
-    Code: int32
+    Code: int64
     CVV: int
     UserId: Guid
     TypeCard: TypeOfCard

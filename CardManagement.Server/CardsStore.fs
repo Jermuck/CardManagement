@@ -27,6 +27,7 @@ let private create (userId: Guid) (typeCard: TypeOfCard) = async {
             | false -> return Error { Message = "Sorry, We can't create this card for you" }
             | true ->
                 let newCard = buildCard user.Value typeCard 1000
+                printfn "%A" newCard.Code
                 newCard |> saveCard |> Async.AwaitTask |> ignore
                 return Ok newCard;
     with

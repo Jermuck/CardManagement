@@ -1,7 +1,9 @@
+open System
+open System.Numerics
 open CardManagement.Data.UsersRepository
 
 [<EntryPoint>]
 let main _ =
-    let user = tryFindUserByEmail "johndoe@exampl.com" |> Async.AwaitTask |> Async.RunSynchronously
-    printfn "%A" user
+    let code = int64(Math.Abs(Random().Next(100_000_000, 999_999_999))) * int64(100000)
+    printfn "%A" (code)
     0 
