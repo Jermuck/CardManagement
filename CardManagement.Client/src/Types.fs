@@ -36,3 +36,10 @@ type IHeadersTabs = {
     ClassName: string
     Type: SortingArg
 }
+
+type ITransactionModalComponent = {
+    Message: string
+    Amount: int
+    Code: string
+    CardIdSender: Guid
+}
