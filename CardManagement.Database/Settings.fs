@@ -1,4 +1,4 @@
-module CardManagement.Data.Settings
+module CardManagement.Database.Settings
 
 open System.IO
 open Microsoft.Extensions.Configuration

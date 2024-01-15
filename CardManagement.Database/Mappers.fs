@@ -1,11 +1,14 @@
-module CardManagement.Data.Mappers
+module CardManagement.Database.Mappers
 
-open CardManagement.Data.``public``
+open CardManagement.Database.``public``
 open CardManagement.Shared.Types
 open System
 
 let private convertTimeToDateOnly (time: DateTime) =
-   DateOnly(time.Year, time.Month, time.Hour) 
+   DateOnly(time.Year, time.Month, time.Hour)
+
+let private convertTimeToDateTime (time: DateOnly) =
+    DateTime(time.Year, time.Month, time.Day)
 
 let private mapTypeOfCardToDB (typeCard: TypeOfCard) =
     match typeCard with
@@ -72,6 +75,7 @@ let mapCardToDB (card: Card) =
 let mapDBCardToDomain (card: cards) =
     let typeCard = mapTypeOfCardToDomain card.type_card
     let status = mapStatusOfCardToDomain card.status
+    let time = convertTimeToDateTime card.life_time
     {
         Id = card.id
         Code = card.code
@@ -79,7 +83,7 @@ let mapDBCardToDomain (card: cards) =
         UserId = card.user_id
         TypeCard = typeCard
         Balance = card.balance
-        LifeTime = DateTime.Now
+        LifeTime = time
         Status = status
         Transactions = [] 
     }
@@ -92,4 +96,5 @@ let mapTransactionToDB (transaction: Transaction) =
         card_id = transaction.CardId
         to_user_id = transaction.ToUserId
         create_date = date
+        message = transaction.Message 
     }

@@ -1,9 +1,9 @@
-module CardManagement.Data.UsersRepository
+module CardManagement.Database.UsersRepository
 
 open CardManagement.Shared.Types
-open CardManagement.Data.DatabaseContext
-open CardManagement.Data.``public``
-open CardManagement.Data.Mappers
+open CardManagement.Database.DatabaseContext
+open CardManagement.Database.``public``
+open CardManagement.Database.Mappers
 open System.Threading.Tasks
 open SqlHydra.Query
 open System

@@ -1,10 +1,10 @@
-module CardManagement.Data.CardsRepository
+module CardManagement.Database.CardsRepository
 
 open System
-open CardManagement.Data.DatabaseContext
+open CardManagement.Database.DatabaseContext
 open CardManagement.Shared.Types
-open CardManagement.Data.``public``
-open CardManagement.Data.Mappers
+open CardManagement.Database.``public``
+open CardManagement.Database.Mappers
 open SqlHydra.Query
 
 let saveCard (card: Card) =
@@ -21,4 +21,15 @@ let getCards (userId: Guid) = task {
         select card
     }
     return cards |> Seq.map mapDBCardToDomain
+}
+
+let tryFindCardByCode (code: int64) = task {
+    let! cards = selectTask HydraReader.Read (Create openContext) {
+        for card in cards do
+        where (card.code = code)
+        select card
+    }
+    match Seq.isEmpty cards with
+    | true -> return None
+    | false -> return cards |> Seq.item 0 |> mapDBCardToDomain |> Some  
 }
