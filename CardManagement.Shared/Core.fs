@@ -1,5 +1,6 @@
 ﻿module CardManagement.Shared.Core
 
+open System
 open CardManagement.Shared.Types
 
 type IUsersStore = {
@@ -10,6 +11,7 @@ type IUsersStore = {
 type ICardsStore = {
     Get: unit -> Async<ResponseResult<Card seq>>
     Create: TypeOfCard -> Async<ResponseResult<Card>>
+    CreateTransaction: TransactionInput -> Async<ResponseResult<Transaction>>
 }
 
 type IProfileStore = {

@@ -1,4 +1,4 @@
-module CardManagement.Client.Chart
+module CardManagement.Client.ChartComponent
 
 open Feliz
 open Feliz.Recharts
@@ -35,7 +35,7 @@ let createGradient (id: string) color =
     ]
 
 [<ReactComponent>]
-let Chart width height =
+let ChartComponent width height =
     Recharts.areaChart [
         areaChart.width width
         areaChart.height height

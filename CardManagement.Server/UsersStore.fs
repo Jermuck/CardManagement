@@ -1,6 +1,6 @@
 module CardManagement.Server.UserStore
 
-open CardManagement.Data.UsersRepository
+open CardManagement.Database.UsersRepository
 open CardManagement.Shared.Types
 open CardManagement.Shared.Core
 open CardManagement.Infrastructure.UserActions
@@ -22,7 +22,7 @@ let register inputUser = async {
         | ex -> printfn "%A" ex; return Error { Message = "Server error" }
 }
 
-let private login email password: Async<ResponseResult<RegistrationResponse>> = async {
+let private login email password = async {
     try
         let! isExistUser = tryFindUserByEmail email |> Async.AwaitTask
         if isExistUser.IsNone then return Error { Message = $"User with %s{email} not found" }

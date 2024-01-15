@@ -16,6 +16,7 @@ type Transaction = {
     CreateDate: DateTime
     Sum: int
     ToUserId: Guid
+    Message: string
 }
     
 type Card = {
@@ -58,6 +59,13 @@ type InputUser = {
 
 type ResponseError = {
     Message: string
+}
+
+type TransactionInput = {
+    Message: string
+    Amount: int
+    Code: int64
+    CardIdSender: Guid
 }
 
 type ResponseResult<'a> =

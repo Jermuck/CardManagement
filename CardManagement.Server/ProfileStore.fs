@@ -1,12 +1,11 @@
 module CardManagement.Server.ProfileStore
 
 open CardManagement.Shared.Types
-open System
-open CardManagement.Data.UsersRepository
+open CardManagement.Database.UsersRepository
 open CardManagement.Shared.Core
 open CardManagement.Server.RemotingUtils
 
-let private getMyProfile (userId: Guid) () = async {
+let private getMyProfile userId () = async {
     try
         let! isExistUser = tryFindUserById userId |> Async.AwaitTask
         match isExistUser with
