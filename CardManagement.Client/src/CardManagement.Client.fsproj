@@ -11,6 +11,7 @@
     <Compile Include="WebApi.fs" />
     <Compile Include="Utils.fs" />
     <Compile Include="Inputs.fs" />
+    <Compile Include="ErrorComponent.fs" />
     <Compile Include="TransactionModalComponent.fs" />
     <Compile Include="TransactionsTableComponent.fs" />
     <Compile Include="ChartComponent.fs" />
@@ -18,7 +19,6 @@
     <Compile Include="CardComponent.fs" />
     <Compile Include="TimeLineComponent.fs" />
     <Compile Include="HomeHeaderComponent.fs" />
-    <Compile Include="ErrorComponent.fs" />
     <Compile Include="CardFormComponent.fs" />
     <Compile Include="CardsDashboardComponent.fs" />
     <Compile Include="HomeBodyComponent.fs" />
@@ -38,6 +38,7 @@
     <PackageReference Include="Feliz.Recharts" Version="4.2.0" />
     <PackageReference Include="Feliz.Router" Version="4.0.0" />
     <PackageReference Include="Feliz.UseDeferred" Version="2.0.0" />
+    <PackageReference Include="Feliz.UseListener" Version="0.6.3" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\CardManagement.Shared\CardManagement.Shared.fsproj" />

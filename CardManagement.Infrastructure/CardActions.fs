@@ -29,7 +29,8 @@ let getIsAvailableCard (user: User) =
 let buildCode() =
    let random = Random()
    let code = int64(Math.Abs(random.Next(100_000_000, 999_999_999))).ToString()
-   let endCode = Math.Abs(random.Next(10000, 99999)).ToString()
+   let endCode = Math.Abs(random.Next(1_000_000, 9_999_999)).ToString()
+   printfn "%A" (code + endCode)
    int64(code + endCode)
    
 let buildCard (user: User) (typeCard: TypeOfCard) (balance: int) =

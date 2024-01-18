@@ -4,12 +4,11 @@ open CardManagement.Shared.Types
 open CardManagement.Database.DatabaseContext
 open CardManagement.Database.``public``
 open CardManagement.Database.Mappers
-open System.Threading.Tasks
 open SqlHydra.Query
 open System
 
-let tryFindUserByEmail (email: string): Task<User option> = task {
-    let! users = selectTask HydraReader.Read (Create openContext) {
+let tryFindUserByEmail (email: string) = async {
+    let! users = selectAsync HydraReader.Read sqlHydraContext {
         for user in users do
         where (user.email = email)
         select user
@@ -19,8 +18,8 @@ let tryFindUserByEmail (email: string): Task<User option> = task {
     | false -> return Seq.item 0 users |> mapDBUserToDomain |> Some
 }
 
-let tryFindUserById (id: Guid): Task<User option> = task {
-    let! users = selectTask HydraReader.Read (Create openContext) {
+let tryFindUserById (id: Guid) = async {
+    let! users = selectAsync HydraReader.Read sqlHydraContext {
         for user in users do
         where (user.id = id)
         select user
@@ -32,14 +31,14 @@ let tryFindUserById (id: Guid): Task<User option> = task {
 
 let saveUser (user: User) =
     let dbUser = mapUserToDB user
-    insertTask (Create openContext) {
+    insertTask sqlHydraContext {
         into users
         entity dbUser
     }
 
 
 let getUserByIdWithJoinCards (id: Guid) =
-    selectTask HydraReader.Read (Create openContext) {
+    selectAsync HydraReader.Read sqlHydraContext {
         for user in users do
         where (user.id = id)
         join card in cards on (user.id = card.user_id)

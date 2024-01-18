@@ -16,7 +16,7 @@ let private initialStateUser = { Name = ""; Surname = ""; Patronymic = ""; Passw
 let private validatePassword (password: string) repeatPassword =
     password = repeatPassword
 
-let private validateFieldsRegistrationUser user repeatPassword =
+let private validateFieldsRegistrationUser (user: InputUser) repeatPassword =
     if user.Name.Length < 4 then Some "Not correct Name field"
     elif user.Surname.Length < 4 then Some "Not correct Surname field"
     elif user.Patronymic.Length < 4 then Some "Not correct Patronymic field"

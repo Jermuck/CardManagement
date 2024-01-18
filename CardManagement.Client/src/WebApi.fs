@@ -1,7 +1,7 @@
 module CardManagement.Client.WebApi
 
 open CardManagement.Shared.Core
-open CardManagement.Shared.RouteBuilders
+open CardManagement.Shared.Utils
 open Fable.Remoting.Client
 
 let inline CreateApiProxy<'a> () =
@@ -15,3 +15,4 @@ let inline CreateApiProxy<'a> () =
 let userStore = CreateApiProxy<IUsersStore>()    
 let profileStore = CreateApiProxy<IProfileStore>()
 let cardsStore = CreateApiProxy<ICardsStore>()
+let chartStore = CreateApiProxy<IChartStore>()

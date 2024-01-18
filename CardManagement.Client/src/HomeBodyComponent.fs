@@ -11,11 +11,14 @@ open CardManagement.Shared.Types
 open CardManagement.Client.TransactionsTableComponent
 open CardManagement.Client.TransactionModalComponent
 open CardManagement.Client.WebApi
+open CardManagement.Client.ErrorComponent
+open Fable.Core.JS
 
 [<ReactComponent>]
 let HomeBodyComponent (cards: Card seq) =
     let card, setCard = React.useState<Card>(Seq.item 0 cards)
     let modalState, toggleState = React.useState(false)
+    let error, setError = React.useState<IMessage option> None
     
     let changeCard id =
         cards
@@ -32,7 +35,13 @@ let HomeBodyComponent (cards: Card seq) =
                 CardIdSender = transactionInput.CardIdSender
             }
             let! result = cardsStore.CreateTransaction newTransactionInput
-            printfn "%A" result
+            match result with
+            | Error error ->
+                { Message = error.Message; Color = "#f14668" } |> Some |> setError
+                setTimeout (fun _ -> setError None) 2000 |> ignore
+            | Ok _ ->
+                { Message = "Success transaction!"; Color = "#00d1b2" } |> Some |> setError
+                setTimeout (fun _ -> setError None; Browser.Dom.window.location.reload()) 2000 |> ignore
         with
             | ex -> printfn "%A" ex; 
     }
@@ -47,7 +56,11 @@ let HomeBodyComponent (cards: Card seq) =
                 prop.id "modal-sample"
                 if modalState then modal.isActive
                 prop.children [
-                    Bulma.modalBackground []
+                    Bulma.modalBackground [
+                        prop.children [
+                            if error.IsSome then ErrorComponent error.Value.Message 20 20 error.Value.Color
+                        ]
+                    ]
                     TransactionModalComponent card.Id (CardComponent card) (fun v -> createTransaction v |> Async.StartImmediate)
                     Bulma.modalClose [
                         prop.onClick (fun _ -> toggleState(false))
@@ -79,7 +92,7 @@ let HomeBodyComponent (cards: Card seq) =
                                     style.justifyContent.spaceBetween
                                 ]
                                 prop.children [
-                                    CardComponent card
+                                    CardComponent card 
                                     CardActionButtonsComponent (fun _ -> toggleState true)
                                 ]
                             ]
@@ -100,12 +113,12 @@ let HomeBodyComponent (cards: Card seq) =
                                         ]
                                         prop.text "Insights"
                                     ]
-                                    ChartComponent 650 250
+                                    ChartComponent 650 250 card.Id
                                 ]
                             ]
                         ]
                     ]
-                    TransactionsTableComponent()
+                    TransactionsTableComponent card.Id
                 ]
             ]
         ]

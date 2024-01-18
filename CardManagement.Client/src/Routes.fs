@@ -37,7 +37,7 @@ let private getPublicRoutes pageUrl =
 let Router() =
     let pageUrl, updateUrl = React.useState(parseUrl(Router.currentUrl()))
     
-    let getIsAuth() = async {
+    let getRoutesCallback() = async {
         try
             let! profile = profileStore.GetMyProfile()
             match profile with
@@ -47,7 +47,7 @@ let Router() =
             | ex -> printfn "%A" ex; return getPublicRoutes
     }
     
-    let data = React.useDeferred(getIsAuth(), [||])
+    let data = React.useDeferred(getRoutesCallback(), [||])
     
     let currentPage =
         match data with

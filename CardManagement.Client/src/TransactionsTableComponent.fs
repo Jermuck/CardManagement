@@ -1,10 +1,77 @@
 module CardManagement.Client.TransactionsTableComponent
 
+open System
 open Feliz
+open Feliz.Bulma
 open Feliz.DaisyUI
+open CardManagement.Client.WebApi
+open CardManagement.Shared.Types
+open CardManagement.Shared.Utils
+open Feliz.UseDeferred
 
 [<ReactComponent>]
-let TransactionsTableComponent() =
+let StatusTransactionComponent isMoneyIn =
+    Bulma.tag [
+        match isMoneyIn with
+        | true ->
+            Bulma.color.isPrimary
+            prop.text "Money In" 
+        | false ->
+            Bulma.color.isDanger
+            prop.text "Money Out" 
+    ]
+
+[<ReactComponent>]
+let TransactionsTableComponent cardId =
+    let getTransactions() = async {
+        try
+            let! result = cardsStore.GetTransactions cardId
+            match result with
+            | Error _ -> return Seq.empty
+            | Ok value -> return value
+        with
+            | ex -> printfn "%A" ex; return Seq.empty
+    }
+    
+    let data = React.useDeferred(getTransactions(), [|box cardId|])
+    
+    let convertDate (date: DateTime) =
+        let day = date.Day.ToString()
+        let month = getStringMonth date
+        let year = date.Year.ToString()
+        day + " " + month + " " + year
+        
+    let convertSumTransaction isMoneyIn sum=
+        match isMoneyIn with
+        | true -> "+$" + sum.ToString() + ",00"
+        | false -> "-$" + sum.ToString() + ",00"
+    
+    let convertMessage (message: string) =
+        if message.Length > 10 then message[0..12] + "..."
+        else if message.Length = 0 then "None"
+        else message
+    
+    let fieldsTable =
+        match data with
+        | Deferred.Resolved transactions ->
+             let result = transactions
+                          |> Seq.sortBy (fun v -> v.CreateDate)
+                          |> Seq.indexed
+             Html.tbody [
+                for index, transaction in result do
+                    Html.tr [
+                        prop.children [
+                            Html.td (index+1)
+                            Html.td (convertSumTransaction (cardId <> transaction.CardId) transaction.Sum )
+                            Html.td [StatusTransactionComponent (cardId <> transaction.CardId)]
+                            Html.td (convertDate transaction.CreateDate)
+                            Html.td (convertMessage transaction.Message)
+                        ]
+                    ]    
+            ]
+        | _ -> Html.none
+        
+    
     Html.div [
         prop.style [
             style.width (length.perc 95)
@@ -23,28 +90,14 @@ let TransactionsTableComponent() =
                 prop.children [
                     Html.thead [
                         Html.tr [
-                            Html.th "Card code"
                             Html.th "Id"
                             Html.th "Amount"
                             Html.th "Status"
                             Html.th "Date"
+                            Html.th "Message"
                         ]
                     ]
-                    Html.tbody [
-                        Html.tr [
-                            prop.style [
-                                style.height 20
-                            ]
-                            for a in 1..20 do
-                                prop.children [
-                                    Html.td "1"
-                                    Html.td "Cy Ganderton"
-                                    Html.td "Quality Control Specialist"
-                                    Html.td "Active"
-                                    Html.td "Blue"
-                                ]
-                        ]
-                    ]
+                    fieldsTable
                 ]
             ]
         ]

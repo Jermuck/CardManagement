@@ -6,6 +6,9 @@ open Feliz
 let convertCardToPoint (code: string) =
     "•••• •••• •••• " + code[-4..]
 
+let addBackSpaceToCardCode (code: string) =
+    code[0..3] + " " + code[4..7] + " " + code[8..11] + " " + code[12..code.Length]
+
 [<ReactComponent>]
 let CardComponent (card: Card) =
     
@@ -13,7 +16,7 @@ let CardComponent (card: Card) =
         match card.TypeCard with
         | Basic -> "card_basic"
         | Priority -> "card_priority"
-        
+    
     let time =
         let year = card.LifeTime.Year.ToString()[2..]
         let stringMonth = card.LifeTime.Month.ToString()
@@ -22,6 +25,9 @@ let CardComponent (card: Card) =
             | true -> stringMonth
             | false -> "0" + stringMonth
         updateMonth + "/" + year
+    
+    let convertBalance balance =
+        "$" + balance.ToString() + ",00" + " USD"
     
     Html.div [
         prop.className className
@@ -43,7 +49,7 @@ let CardComponent (card: Card) =
                         ]
                     ]
                     Html.h1 [
-                        prop.text (card.Balance.ToString() + "$")
+                        prop.text (convertBalance card.Balance)
                         prop.style [
                             style.color "#FFF"
                         ]
@@ -76,7 +82,7 @@ let CardComponent (card: Card) =
                         ]
                     ]
                     Html.h1 [
-                        prop.text (convertCardToPoint(card.Code.ToString()))
+                        prop.text (card.Code.ToString() |> convertCardToPoint)
                         prop.style [
                             style.position.absolute
                             style.right 24

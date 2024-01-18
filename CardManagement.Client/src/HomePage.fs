@@ -19,6 +19,7 @@ let HomePage() =
     let getCards() = async {
         try
             let! result = cardsStore.Get()
+            printfn "%A" "Render"
             match result with
             | Error _ -> return LoadingPage()
             | Ok data -> return getComponent data

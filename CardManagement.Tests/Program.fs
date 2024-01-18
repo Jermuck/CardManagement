@@ -1,4 +1,8 @@
 
+open System
+
 [<EntryPoint>]
 let main _ =
-    0 
+   let dt = DateTime.Now
+   printfn "%A" dt.Minute
+   0
