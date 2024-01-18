@@ -32,7 +32,7 @@ CREATE TABLE transactions
     card_id     uuid NOT NULL,
     create_date DATE NOT NULL,
     sum         int  NOT NULL,
-    to_user_id  uuid NOT NULL,
+    to_card_id  uuid NOT NULL,
     CONSTRAINT fk_cards FOREIGN KEY (card_id) REFERENCES cards (id),
-    CONSTRAINT fk_users FOREIGN KEY (to_user_id) REFERENCES users (id)
+    CONSTRAINT fk_to_cards FOREIGN KEY (to_card_id) REFERENCES cards (id)
 )
