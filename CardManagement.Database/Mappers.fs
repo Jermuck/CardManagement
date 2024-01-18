@@ -94,7 +94,7 @@ let mapTransactionToDB (transaction: Transaction) =
         id = transaction.Id
         sum = transaction.Sum
         card_id = transaction.CardId
-        to_user_id = transaction.ToUserId
+        to_card_id = transaction.ToCardId
         create_date = date
         message = transaction.Message 
     }
@@ -105,7 +105,7 @@ let mapDBTransactionToDomain (transaction: transactions) =
         Id = transaction.id
         Sum = transaction.sum
         CardId = transaction.card_id
-        ToUserId = transaction.to_user_id
+        ToCardId = transaction.to_card_id
         CreateDate = time
         Message = transaction.message 
     }

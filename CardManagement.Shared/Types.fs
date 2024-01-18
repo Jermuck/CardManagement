@@ -15,7 +15,7 @@ type Transaction = {
     CardId: Guid
     CreateDate: DateTime
     Sum: int
-    ToUserId: Guid
+    ToCardId: Guid
     Message: string
 }
     
@@ -67,7 +67,6 @@ type TransactionInput = {
     Code: int64
     CardIdSender: Guid
 }
-
 
 type ResponseResult<'a> =
     | Ok of 'a

@@ -52,18 +52,18 @@ let buildCard (user: User) (typeCard: TypeOfCard) (balance: int) =
     }
     card
 
-let private buildTransaction cardId sumTransaction toId message =
+let private buildTransaction cardId sumTransaction toCardId message =
     {
         Id = Guid.NewGuid()
         CardId = cardId
         Sum = sumTransaction
         CreateDate = DateTime.Now
-        ToUserId = toId
+        ToCardId = toCardId
         Message = message 
     }
     
-let private makeTransaction (card: Card) (sumTransaction: int) (toId: Guid) (message: string) =
-    let newTransaction = buildTransaction card.Id sumTransaction toId message
+let private makeTransaction (card: Card) (sumTransaction: int) (toCardId: Guid) (message: string) =
+    let newTransaction = buildTransaction card.Id sumTransaction toCardId message
     { card with Transactions = [newTransaction] |> Seq.append card.Transactions }
 
 let private getTransactionsSum transactions =
@@ -78,7 +78,7 @@ let private getPossiblyTransaction (card: Card) (amount: int) =
     | Priority -> transactionsSum + amount <= 300_000
     | Basic -> transactionsSum + amount <= 100_000
     
-let processPayment (card: Card) (amount: int) (toUserId: Guid) (message: string) =
+let processPayment (card: Card) (amount: int) (toCardId: Guid) (message: string) =
     match card.Status with
     | Deactivate -> Error { Message = "Card deactivate" }
     | Activate ->
@@ -89,5 +89,5 @@ let processPayment (card: Card) (amount: int) (toUserId: Guid) (message: string)
         else if not isPossiblyTransactionCard then Error { Message = "The limit on the card has been exceeded" }
         else
             match isValidBalanceCard with
-            | Some currentBalance -> makeTransaction { card with Balance = currentBalance } amount toUserId message |> Ok
+            | Some currentBalance -> makeTransaction { card with Balance = currentBalance } amount toCardId message |> Ok
             | None -> Error { Message = "Insufficient funds on the card" }

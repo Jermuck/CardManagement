@@ -10,13 +10,13 @@ open SqlHydra.Query
 
 let saveCard (card: Card) =
     let dbCard = mapCardToDB card
-    insertAsync sqlHydraContext {
+    insertAsync (Create openContext) {
         into cards
         entity dbCard
     }
 
 let getCards (userId: Guid) = async {
-    let! cards = selectAsync HydraReader.Read sqlHydraContext {
+    let! cards = selectAsync HydraReader.Read (Create openContext) {
         for card in cards do
         where (card.user_id = userId)
         select card
@@ -25,7 +25,7 @@ let getCards (userId: Guid) = async {
 }
 
 let tryFindCardByCode (code: int64) = async {
-    let! cards = selectAsync HydraReader.Read sqlHydraContext {
+    let! cards = selectAsync HydraReader.Read (Create openContext) {
         for card in cards do
         where (card.code = code)
         select card
@@ -36,9 +36,8 @@ let tryFindCardByCode (code: int64) = async {
 }
 
 let updateCardBalanceById (cardId: Guid) (balance: int) =
-    updateAsync sqlHydraContext {
+    updateAsync (Create openContext) {
         for card in cards do
         set card.balance balance
         where (card.id = cardId)
     }
-    

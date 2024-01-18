@@ -12,7 +12,4 @@ let openContext() =
     dataSourceBuilder.MapEnum<statusofcard>() |> ignore
     let connection = dataSourceBuilder.Build()
     let ctx = connection.OpenConnection()
-    printfn "%A" "Connection create"
     new QueryContext(ctx, compiler)
-    
-let sqlHydraContext = openContext |> Create

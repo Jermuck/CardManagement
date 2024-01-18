@@ -9,13 +9,13 @@ open CardManagement.Database.``public``
 
 let saveTransaction (transaction: Transaction) =
     let mapToDBTransaction = mapTransactionToDB transaction
-    insertAsync sqlHydraContext {
+    insertAsync (Create openContext) {
         into transactions
         entity mapToDBTransaction
     }
     
 let getTransactionsByCardId (cardId: Guid) = async {
-    let! result = selectAsync HydraReader.Read sqlHydraContext {
+    let! result = selectAsync HydraReader.Read (Create openContext) {
         for transaction in transactions do
         where (transaction.card_id = cardId)
         select transaction
@@ -23,10 +23,10 @@ let getTransactionsByCardId (cardId: Guid) = async {
     return result |> Seq.map mapDBTransactionToDomain
 }
 
-let getTransactionsToUserId (userId: Guid) notEqualCardId = async {
-    let! result = selectAsync HydraReader.Read sqlHydraContext {
+let getTransactionsToCardId (cardId: Guid) = async {
+    let! result = selectAsync HydraReader.Read (Create openContext) {
         for transaction in transactions do
-        where (transaction.to_user_id = userId && transaction.card_id <> notEqualCardId)
+        where (transaction.to_card_id = cardId)
         select transaction
     }
     return result |> Seq.map mapDBTransactionToDomain

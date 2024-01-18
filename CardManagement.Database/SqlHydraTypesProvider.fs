@@ -81,7 +81,7 @@ module ``public`` =
           [<SqlHydra.ProviderDbType("Integer")>]
           sum: int
           [<SqlHydra.ProviderDbType("Uuid")>]
-          to_user_id: System.Guid
+          to_card_id: System.Guid
           [<SqlHydra.ProviderDbType("Varchar")>]
           message: string }
 
@@ -150,7 +150,7 @@ module ``public`` =
             member __.card_id = RequiredColumn(reader, getOrdinal, reader.GetGuid, "card_id")
             member __.create_date = RequiredColumn(reader, getOrdinal, reader.GetDateOnly, "create_date")
             member __.sum = RequiredColumn(reader, getOrdinal, reader.GetInt32, "sum")
-            member __.to_user_id = RequiredColumn(reader, getOrdinal, reader.GetGuid, "to_user_id")
+            member __.to_card_id = RequiredColumn(reader, getOrdinal, reader.GetGuid, "to_card_id")
             member __.message = RequiredColumn(reader, getOrdinal, reader.GetString, "message")
 
             member __.Read() =
@@ -158,7 +158,7 @@ module ``public`` =
                   card_id = __.card_id.Read()
                   create_date = __.create_date.Read()
                   sum = __.sum.Read()
-                  to_user_id = __.to_user_id.Read()
+                  to_card_id = __.to_card_id.Read()
                   message = __.message.Read() }
 
             member __.ReadIfNotNull() =

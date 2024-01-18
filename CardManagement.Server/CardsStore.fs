@@ -36,16 +36,16 @@ let private createCard userId typeCard = async {
 let private createTransaction userId transactionInput = async {
     try
         let! isExistCardRecipient = tryFindCardByCode transactionInput.Code
-        let! cardsSender = getCards userId 
+        let! cardsSender = getCards userId
         let isExistCardSender = cardsSender |> Seq.tryFind (fun v -> v.Id = transactionInput.CardIdSender)
         if transactionInput.Amount < 1 then return Error { Message = "Not valid amount" } 
         else if isExistCardSender.Value.Code = transactionInput.Code then return Error { Message = "Not available transaction" }
         else if isExistCardRecipient.IsNone then return Error { Message = "Error card with this code not found" }
         else if isExistCardSender.IsNone then return Error { Message = "Server error" } else
-        let recipientId = isExistCardRecipient.Value.UserId
+        let recipientCardId = isExistCardRecipient.Value.Id
         let! transactionsCardSender = getTransactionsByCardId isExistCardSender.Value.Id
         let cardSenderWithTransactions = { isExistCardSender.Value with Transactions = transactionsCardSender }
-        let isSuccessTransaction = processPayment cardSenderWithTransactions transactionInput.Amount recipientId transactionInput.Message
+        let isSuccessTransaction = processPayment cardSenderWithTransactions transactionInput.Amount recipientCardId transactionInput.Message
         match isSuccessTransaction with
         | Error error -> return Error { Message = error.Message }
         | Ok cardWithUpdateTransactions ->
@@ -60,13 +60,14 @@ let private createTransaction userId transactionInput = async {
 
 let getMyTransactions userId cardId = async {
     try
-        let! cards = getCards userId 
+        let! cards = getCards userId
         let isExistCard = cards |> Seq.tryFind (fun v -> v.Id = cardId)
+        printfn "%A" isExistCard.Value.Code
         match isExistCard with
         | None -> return Error { Message = "It's not your card" }
         | Some card ->
             let! transactionsByCard = getTransactionsByCardId card.Id
-            let! transactionsToUserId = getTransactionsToUserId userId card.Id
+            let! transactionsToUserId = getTransactionsToCardId cardId
             let allTransactions = Seq.concat [transactionsByCard; transactionsToUserId]
             return Ok allTransactions
     with

@@ -8,7 +8,7 @@ open SqlHydra.Query
 open System
 
 let tryFindUserByEmail (email: string) = async {
-    let! users = selectAsync HydraReader.Read sqlHydraContext {
+    let! users = selectAsync HydraReader.Read (Create openContext) {
         for user in users do
         where (user.email = email)
         select user
@@ -19,7 +19,7 @@ let tryFindUserByEmail (email: string) = async {
 }
 
 let tryFindUserById (id: Guid) = async {
-    let! users = selectAsync HydraReader.Read sqlHydraContext {
+    let! users = selectAsync HydraReader.Read (Create openContext) {
         for user in users do
         where (user.id = id)
         select user
@@ -31,14 +31,14 @@ let tryFindUserById (id: Guid) = async {
 
 let saveUser (user: User) =
     let dbUser = mapUserToDB user
-    insertTask sqlHydraContext {
+    insertTask (Create openContext) {
         into users
         entity dbUser
     }
 
 
 let getUserByIdWithJoinCards (id: Guid) =
-    selectAsync HydraReader.Read sqlHydraContext {
+    selectAsync HydraReader.Read (Create openContext) {
         for user in users do
         where (user.id = id)
         join card in cards on (user.id = card.user_id)
