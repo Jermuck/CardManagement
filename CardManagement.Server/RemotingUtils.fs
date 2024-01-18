@@ -3,7 +3,7 @@ module CardManagement.Server.RemotingUtils
 open System
 open Fable.Remoting.Server
 open Fable.Remoting.Giraffe
-open CardManagement.Shared.RouteBuilders
+open CardManagement.Shared.Utils
 open Microsoft.AspNetCore.Http
 
 let createPublicHandler controller = 

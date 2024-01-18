@@ -6,9 +6,9 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <Compile Include="RouteBuilders.fs" />
         <Compile Include="Types.fs" />
         <Compile Include="Core.fs" />
+        <Compile Include="Utils.fs" />
     </ItemGroup>
 
 </Project>

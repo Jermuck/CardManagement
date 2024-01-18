@@ -9,14 +9,14 @@ open CardManagement.Server.Password
 
 let register inputUser = async {
     try
-        let! isExistUser = tryFindUserByEmail inputUser.Email |> Async.AwaitTask
+        let! isExistUser = tryFindUserByEmail inputUser.Email
         if isExistUser.IsSome then return Error { Message = "User with this email already exist" }
         else
             let user = buildUser inputUser
             let hashPassword = createHash user.Password
             let userWithUpdateHashPassword = { user with Password = hashPassword }
             let token = userToToken userWithUpdateHashPassword
-            saveUser userWithUpdateHashPassword |> Async.AwaitTask |> ignore
+            do! saveUser userWithUpdateHashPassword |> Async.AwaitTask |> Async.Ignore
             return Ok (user, token)
     with
         | ex -> printfn "%A" ex; return Error { Message = "Server error" }
@@ -24,7 +24,7 @@ let register inputUser = async {
 
 let private login email password = async {
     try
-        let! isExistUser = tryFindUserByEmail email |> Async.AwaitTask
+        let! isExistUser = tryFindUserByEmail email
         if isExistUser.IsNone then return Error { Message = $"User with %s{email} not found" }
         else
             let user = isExistUser.Value

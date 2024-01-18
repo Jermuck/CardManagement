@@ -12,8 +12,13 @@ type ICardsStore = {
     Get: unit -> Async<ResponseResult<Card seq>>
     Create: TypeOfCard -> Async<ResponseResult<Card>>
     CreateTransaction: TransactionInput -> Async<ResponseResult<Transaction>>
+    GetTransactions: Guid -> Async<ResponseResult<Transaction seq>>
 }
 
 type IProfileStore = {
     GetMyProfile: unit -> Async<ResponseResult<User>>
+}
+
+type IChartStore = {
+    GetCoordinates: Guid -> Async<ResponseResult<Point seq>>
 }

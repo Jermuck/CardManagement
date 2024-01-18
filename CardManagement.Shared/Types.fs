@@ -68,8 +68,15 @@ type TransactionInput = {
     CardIdSender: Guid
 }
 
+
 type ResponseResult<'a> =
     | Ok of 'a
     | Error of ResponseError
     
 type RegistrationResponse = User * Token
+
+type Point = {
+    Name: string
+    Uv: float
+    Pv: float
+}

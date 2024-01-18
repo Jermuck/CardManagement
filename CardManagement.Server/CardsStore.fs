@@ -10,7 +10,7 @@ open CardManagement.Database.TransactionsRepository
 
 let private getUserCards userId () = async {
     try
-        let! cards = getCards userId |> Async.AwaitTask
+        let! cards = getCards userId
         return Ok cards
     with
         | ex -> printfn "%A" ex; return Error { Message = "Server error" }
@@ -18,7 +18,7 @@ let private getUserCards userId () = async {
 
 let private createCard userId typeCard = async {
     try
-        let! user = tryFindUserById userId |> Async.AwaitTask
+        let! user = tryFindUserById userId
         if user.IsNone then return Error { Message = "User with this id not found" }
         else
             let availableTypesCard = getIsAvailableCard user.Value
@@ -27,7 +27,7 @@ let private createCard userId typeCard = async {
             | false -> return Error { Message = "Sorry, We can't create this card for you" }
             | true ->
                 let newCard = buildCard user.Value typeCard 1000
-                newCard |> saveCard |> Async.AwaitTask |> ignore
+                do! newCard |> saveCard |> Async.Ignore
                 return Ok newCard;
     with
         | ex -> printfn "%A" ex; return Error { Message = "Server error" }
@@ -35,29 +35,50 @@ let private createCard userId typeCard = async {
 
 let private createTransaction userId transactionInput = async {
     try
-        let! isExistCardRecipient = tryFindCardByCode transactionInput.Code |> Async.AwaitTask
-        let! cardsSender = getCards userId |> Async.AwaitTask
+        let! isExistCardRecipient = tryFindCardByCode transactionInput.Code
+        let! cardsSender = getCards userId 
         let isExistCardSender = cardsSender |> Seq.tryFind (fun v -> v.Id = transactionInput.CardIdSender)
-        if isExistCardRecipient.IsNone then return Error { Message = "Error card with this code not found" }
+        if transactionInput.Amount < 1 then return Error { Message = "Not valid amount" } 
+        else if isExistCardSender.Value.Code = transactionInput.Code then return Error { Message = "Not available transaction" }
+        else if isExistCardRecipient.IsNone then return Error { Message = "Error card with this code not found" }
         else if isExistCardSender.IsNone then return Error { Message = "Server error" } else
         let recipientId = isExistCardRecipient.Value.UserId
-        let isSuccessTransaction = processPayment isExistCardSender.Value transactionInput.Amount recipientId transactionInput.Message
+        let! transactionsCardSender = getTransactionsByCardId isExistCardSender.Value.Id
+        let cardSenderWithTransactions = { isExistCardSender.Value with Transactions = transactionsCardSender }
+        let isSuccessTransaction = processPayment cardSenderWithTransactions transactionInput.Amount recipientId transactionInput.Message
         match isSuccessTransaction with
         | Error error -> return Error { Message = error.Message }
         | Ok cardWithUpdateTransactions ->
             let newTransactionBySender = cardWithUpdateTransactions.Transactions |> Seq.last
-            newTransactionBySender |> saveTransaction |> Async.AwaitTask |> ignore
+            do! newTransactionBySender |> saveTransaction |> Async.Ignore
+            do! updateCardBalanceById cardWithUpdateTransactions.Id cardWithUpdateTransactions.Balance |> Async.Ignore
+            do! updateCardBalanceById isExistCardRecipient.Value.Id (isExistCardRecipient.Value.Balance + transactionInput.Amount) |> Async.Ignore
             return Ok newTransactionBySender
     with
         | ex -> printfn "%A" ex; return Error { Message = "Server error" }
 }
-    
+
+let getMyTransactions userId cardId = async {
+    try
+        let! cards = getCards userId 
+        let isExistCard = cards |> Seq.tryFind (fun v -> v.Id = cardId)
+        match isExistCard with
+        | None -> return Error { Message = "It's not your card" }
+        | Some card ->
+            let! transactionsByCard = getTransactionsByCardId card.Id
+            let! transactionsToUserId = getTransactionsToUserId userId card.Id
+            let allTransactions = Seq.concat [transactionsByCard; transactionsToUserId]
+            return Ok allTransactions
+    with
+        | ex -> printfn "%A" ex; return Error { Message = "Server error" }
+}
 
 let getCardsStoreImplementation ctx: ICardsStore =
     let userId = getUserIdFromHttpContext ctx
     {
         Get = getUserCards userId
         Create = createCard userId
-        CreateTransaction = createTransaction userId 
+        CreateTransaction = createTransaction userId
+        GetTransactions = getMyTransactions userId 
     }
 

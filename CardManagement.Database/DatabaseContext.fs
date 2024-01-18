@@ -10,5 +10,9 @@ let openContext() =
     let dataSourceBuilder = NpgsqlDataSourceBuilder(connectionString)
     dataSourceBuilder.MapEnum<typeofcard>() |> ignore
     dataSourceBuilder.MapEnum<statusofcard>() |> ignore
-    let connection = dataSourceBuilder.Build().OpenConnection()
-    new QueryContext(connection, compiler)
+    let connection = dataSourceBuilder.Build()
+    let ctx = connection.OpenConnection()
+    printfn "%A" "Connection create"
+    new QueryContext(ctx, compiler)
+    
+let sqlHydraContext = openContext |> Create

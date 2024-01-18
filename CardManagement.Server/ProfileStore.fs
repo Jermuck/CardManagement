@@ -7,7 +7,7 @@ open CardManagement.Server.RemotingUtils
 
 let private getMyProfile userId () = async {
     try
-        let! isExistUser = tryFindUserById userId |> Async.AwaitTask
+        let! isExistUser = tryFindUserById userId
         match isExistUser with
         | Some user -> return Ok user
         | None -> return Error { Message = "User not found" }

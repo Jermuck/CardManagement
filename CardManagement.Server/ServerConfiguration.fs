@@ -11,6 +11,7 @@ open CardManagement.Server.JWT
 open CardManagement.Server.RemotingUtils
 open CardManagement.Server.ProfileStore
 open CardManagement.Server.CardsStore
+open CardManagement.Server.ChartStore
 open Giraffe
 open Microsoft.IdentityModel.Tokens
 
@@ -23,6 +24,7 @@ let webApi: HttpFunc -> HttpContext -> HttpFuncResult =
         authenticate >=> choose [
             createPrivateHandler getProfileStoreImplementation
             createPrivateHandler getCardsStoreImplementation
+            createPrivateHandler getChartStoreImplementation
         ]
     ] |> choose
 

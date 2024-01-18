@@ -5,7 +5,7 @@ open CardManagement.Shared.Types
 open System
 
 let private convertTimeToDateOnly (time: DateTime) =
-   DateOnly(time.Year, time.Month, time.Hour)
+   DateOnly(time.Year, time.Month, time.Day)
 
 let private convertTimeToDateTime (time: DateOnly) =
     DateTime(time.Year, time.Month, time.Day)
@@ -97,4 +97,15 @@ let mapTransactionToDB (transaction: Transaction) =
         to_user_id = transaction.ToUserId
         create_date = date
         message = transaction.Message 
+    }
+    
+let mapDBTransactionToDomain (transaction: transactions) =
+    let time = convertTimeToDateTime transaction.create_date
+    {
+        Id = transaction.id
+        Sum = transaction.sum
+        CardId = transaction.card_id
+        ToUserId = transaction.to_user_id
+        CreateDate = time
+        Message = transaction.message 
     }
