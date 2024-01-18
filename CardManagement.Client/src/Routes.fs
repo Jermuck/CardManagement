@@ -1,5 +1,6 @@
 module CardManagement.Client.Routes
 
+open System
 open Feliz
 open Feliz.Router
 open CardManagement.Client.WebApi
@@ -11,20 +12,20 @@ open CardManagement.Client.Pages.CardsPage
 open Feliz.UseDeferred
 
 type Page =
-    | Home
+    | Home of cardId: Guid
     | Auth
     | NotFound
     | Cards
 
 let private parseUrl = function
-    | [ "home" ] -> Page.Home
+    | [ "home"; Route.Query [ "id", Route.Guid cardId ]  ] -> Page.Home cardId
     | [ "authorization" ] -> Page.Auth
     | [ "cards"; "create" ] -> Page.Cards
     | _ -> NotFound
 
 let private getPrivateRoutes pageUrl =
     match pageUrl with
-    | Home -> HomePage()
+    | Home cardId -> HomePage cardId
     | Cards -> CardsPage()
     | _ -> Html.h1 "Not found"
 
@@ -39,7 +40,7 @@ let Router() =
     
     let getRoutesCallback() = async {
         try
-            let! profile = profileStore.GetMyProfile()
+            let! profile = createProfileStore().GetMyProfile()
             match profile with
             | Ok _ -> return getPrivateRoutes
             | Error _-> return getPublicRoutes

@@ -25,7 +25,7 @@ let StatusTransactionComponent isMoneyIn =
 let TransactionsTableComponent cardId =
     let getTransactions() = async {
         try
-            let! result = cardsStore.GetTransactions cardId
+            let! result = createCardsStore().GetTransactions cardId
             match result with
             | Error _ -> return Seq.empty
             | Ok value -> return value
@@ -51,24 +51,57 @@ let TransactionsTableComponent cardId =
         else if message.Length = 0 then "None"
         else message
     
-    let fieldsTable =
+    let table =
         match data with
         | Deferred.Resolved transactions ->
-             let result = transactions
+            let result = transactions
                           |> Seq.sortBy (fun v -> v.CreateDate)
                           |> Seq.indexed
-             Html.tbody [
-                for index, transaction in result do
-                    Html.tr [
-                        prop.children [
-                            Html.td (index+1)
-                            Html.td (convertSumTransaction (cardId <> transaction.CardId) transaction.Sum )
-                            Html.td [StatusTransactionComponent (cardId <> transaction.CardId)]
-                            Html.td (convertDate transaction.CreateDate)
-                            Html.td (convertMessage transaction.Message)
+            match Seq.isEmpty result with
+            | true ->
+                Html.div [
+                    prop.style [
+                        style.width (length.perc 100)
+                        style.height (length.perc 100)
+                        style.display.flex
+                        style.justifyContent.center
+                        style.alignItems.center
+                    ]
+                    prop.children [
+                        Html.h1 "Empty table"
+                    ]
+                ] 
+            | false -> 
+                Daisy.table [
+                    prop.style [
+                        style.backgroundColor "#FAFAFB"
+                        style.width (length.perc 100)
+                        style.borderRadius 12
+                    ]
+                    prop.children [
+                        Html.thead [
+                            Html.tr [
+                                Html.th "Id"
+                                Html.th "Amount"
+                                Html.th "Status"
+                                Html.th "Date"
+                                Html.th "Message"
+                            ]
                         ]
-                    ]    
-            ]
+                        Html.tbody [
+                            for index, transaction in result do
+                                Html.tr [
+                                    prop.children [
+                                        Html.td (index+1)
+                                        Html.td (convertSumTransaction (cardId <> transaction.CardId) transaction.Sum )
+                                        Html.td [StatusTransactionComponent (cardId <> transaction.CardId)]
+                                        Html.td (convertDate transaction.CreateDate)
+                                        Html.td (convertMessage transaction.Message)
+                                    ]
+                                ]    
+                        ]
+                    ]
+                ]
         | _ -> Html.none
         
     
@@ -81,24 +114,6 @@ let TransactionsTableComponent cardId =
             style.margin 20
         ]
         prop.children [
-            Daisy.table [
-                prop.style [
-                    style.backgroundColor "#FAFAFB"
-                    style.width (length.perc 100)
-                    style.borderRadius 12
-                ]
-                prop.children [
-                    Html.thead [
-                        Html.tr [
-                            Html.th "Id"
-                            Html.th "Amount"
-                            Html.th "Status"
-                            Html.th "Date"
-                            Html.th "Message"
-                        ]
-                    ]
-                    fieldsTable
-                ]
-            ]
+            table
         ]
     ]

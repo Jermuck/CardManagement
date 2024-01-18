@@ -2,11 +2,11 @@ module CardManagement.Client.Pages.CardsPage
 
 open System
 open CardManagement.Client.CardFormComponent
-open CardManagement.Client.Utils
 open CardManagement.Client.CardComponent
 open CardManagement.Client.ErrorComponent
 open CardManagement.Client.HomeHeaderComponent
 open Feliz
+open Feliz.Router
 open CardManagement.Shared.Types
 open Fable.Core.JS
 open CardManagement.Client.WebApi
@@ -33,21 +33,21 @@ let CardsPage() =
     
     let priorityCard = { basicCard with TypeCard = Priority; Balance = 100000 }
     
-    let timeoutCallback _ =
-        setError None
-        navigate [ "home" ]
+    let timeoutCallback id =
+        Router.formatPath("home", [ "id", id.ToString() ])
+        |> Router.navigatePath
         
     let createCard (typeCard: TypeOfCard) = async {
         try
             setError None
-            let! newCard = cardsStore.Create typeCard
+            let! newCard = createCardsStore().Create typeCard
             match newCard with
             | Error error ->
                 { Message = error.Message; Color = "#f14668" } |> Some |> setError
                 setTimeout (fun _ -> setError None) 2000 |> ignore
-            | Ok _ ->
+            | Ok v ->
                 { Message = "Card was success create. Thanks!"; Color = "#00d1b2" } |> Some |> setError
-                setTimeout timeoutCallback 2000 |> ignore
+                setTimeout(fun _ -> timeoutCallback v.Id) 2000 |> ignore
         with
             | ex -> printfn "%A" ex; { Message = "Server error"; Color = "#f14668" } |> Some |> setError
     }

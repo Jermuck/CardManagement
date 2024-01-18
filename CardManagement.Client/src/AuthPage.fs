@@ -9,12 +9,30 @@ open CardManagement.Client.WebApi
 open CardManagement.Client.Types
 open Feliz.Bulma
 open Microsoft.FSharp.Control
+open Feliz.Router
 open Feliz
 
 let private initialStateUser = { Name = ""; Surname = ""; Patronymic = ""; Password = ""; Age = 0; Salary = 0; Email = "" }
 
 let private validatePassword (password: string) repeatPassword =
     password = repeatPassword
+
+let getCards() = async {
+    try
+        let! result = createCardsStore().Get()
+        match result with
+        | Error _ -> return Seq.empty
+        | Ok data -> return data
+    with
+        | ex -> printfn "%A" ex; return Seq.empty
+}
+
+let getRoute (data: Card seq) =
+    match Seq.isEmpty data with
+    | true -> Router.formatPath [ "cards" ; "create" ]
+    | false ->
+        let card = Seq.item 0 data
+        Router.formatPath("home", [ "id", card.Id.ToString() ])
 
 let private validateFieldsRegistrationUser (user: InputUser) repeatPassword =
     if user.Name.Length < 4 then Some "Not correct Name field"
@@ -41,11 +59,11 @@ let RegistrationForm (setTypeAuthorization: TypeAuthorization -> unit) =
     
     let register() = async {
         try
-            let! result = userStore.Register user
+            let! result = createUserStore().Register user
             match result with
             | Ok (_, token) ->
                 Browser.WebStorage.localStorage.setItem("token", token.Token)
-                navigate [ "home" ]
+                navigate [ "cards"; "create" ]
                 Browser.Dom.window.location.reload()
             | Error err -> setError err.Message
         with
@@ -130,11 +148,13 @@ let LoginForm (setTypeAuthorization: TypeAuthorization -> unit) =
     
     let login() = async {
         try
-            let! result =  userStore.Login email password
+            let! result = createUserStore().Login email password
             match result with
             | Ok (_, token) ->
                 Browser.WebStorage.localStorage.setItem("token", token.Token)
-                navigate [ "home" ]
+                let! isExistCards = getCards()
+                let route = getRoute isExistCards
+                navigate [ route ]
                 Browser.Dom.window.location.reload()
             | Error error -> setError error.Message 
         with

@@ -5,35 +5,33 @@ open CardManagement.Client.TimeLineComponent
 open CardManagement.Shared.Types
 open Feliz
 open CardManagement.Client.WebApi
-open Feliz.UseDeferred
 open CardManagement.Client.Pages.LoadingPage
 open CardManagement.Client.HomeBodyComponent
 
 [<ReactComponent>]
-let HomePage() =
-    let getComponent data =
+let HomePage cardId =
+    let content, setContent = React.useState<Fable.React.ReactElement> Html.none
+    
+    let getComponent (data: Card seq) =
         match Seq.isEmpty data with
-        | true -> TimeLineComponent()
-        | false -> HomeBodyComponent data
+        | true -> TimeLineComponent() |> setContent
+        | false ->
+            data
+            |> Seq.find (fun v -> v.Id = cardId)
+            |> HomeBodyComponent data
+            |> setContent
     
     let getCards() = async {
         try
-            let! result = cardsStore.Get()
-            printfn "%A" "Render"
+            let! result = createCardsStore().Get()
             match result with
-            | Error _ -> return LoadingPage()
-            | Ok data -> return getComponent data
+            | Error _ -> LoadingPage() |> setContent
+            | Ok data -> getComponent data
         with
-            | ex -> printfn "%A" ex; return LoadingPage()
+            | ex -> printfn "%A" ex; LoadingPage() |> setContent
     }
     
-    let data = React.useDeferred(getCards(), [| |])
-    
-    let content =
-        match data with
-        | Deferred.Failed error -> Html.div error.Message
-        | Deferred.Resolved result -> result
-        | _ -> LoadingPage()
+    React.useEffect((fun _ -> getCards() |> Async.StartImmediate), [|box cardId|])
     
     Html.div [
         prop.style [

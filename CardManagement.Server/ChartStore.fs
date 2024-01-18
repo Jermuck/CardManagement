@@ -2,31 +2,25 @@ module CardManagement.Server.ChartStore
 
 open CardManagement.Shared.Core
 open CardManagement.Shared.Types
-open CardManagement.Server.RemotingUtils
+open CardManagement.Shared.Utils
 open CardManagement.Database.TransactionsRepository
 
-let private getCoordinates userId cardId = async {
+let private getCoordinates cardId = async {
     try
         let! transactionsByCard = getTransactionsByCardId cardId
-        let! transactionsToUserId = getTransactionsToUserId userId cardId
+        let! transactionsToUserId = getTransactionsToCardId cardId
         let allTransactions = Seq.concat [transactionsByCard; transactionsToUserId] |> Seq.sortBy (_.CreateDate)
         let mapToPoint (transaction: Transaction) =
-            let moneyInOnDay =
+            let uv =
                 allTransactions
                 |> Seq.filter (fun v -> v.CreateDate.Day = transaction.CreateDate.Day && v.CardId = cardId)
-            let uv =
-                match Seq.isEmpty moneyInOnDay with
-                | false -> (Seq.sumBy (_.Sum) moneyInOnDay) / Seq.length moneyInOnDay |> float
-                | true -> 0
-            let moneyOutOnDay =
-                allTransactions
-                |> Seq.filter (fun v -> v.CreateDate.Day = transaction.CreateDate.Day && v.ToUserId = userId && v.CardId <> cardId)
+                |> Seq.sumBy(_.Sum)
             let pv =
-                match Seq.isEmpty moneyOutOnDay with
-                | false -> (Seq.sumBy (_.Sum) moneyOutOnDay) / Seq.length moneyOutOnDay |> float
-                | true -> 0
+                allTransactions
+                |> Seq.filter (fun v -> v.CreateDate.Day = transaction.CreateDate.Day && v.ToCardId = cardId)
+                |> Seq.sumBy(_.Sum)
             {
-                Name = transaction.CreateDate.Day.ToString() + ":" + transaction.CreateDate.Month.ToString() + ":" + transaction.CreateDate.Year.ToString()
+                Name = transaction.CreateDate.Day.ToString() + " " + (getStringMonth transaction.CreateDate)[..2] + " " + transaction.CreateDate.Year.ToString()[2..]
                 Pv = pv
                 Uv = uv
             }
@@ -36,9 +30,8 @@ let private getCoordinates userId cardId = async {
         | ex -> printfn "%A" ex; return Error { Message = "Server error" }
 }
 
-let getChartStoreImplementation ctx: IChartStore =
-    let userId = getUserIdFromHttpContext ctx
+let getChartStoreImplementation _: IChartStore =
     {
-        GetCoordinates = getCoordinates userId 
+        GetCoordinates = getCoordinates
     }
 

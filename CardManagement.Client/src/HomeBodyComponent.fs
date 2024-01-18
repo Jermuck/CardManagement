@@ -1,5 +1,6 @@
 module CardManagement.Client.HomeBodyComponent
 
+open System
 open CardManagement.Client.Types
 open Feliz
 open Feliz.Bulma
@@ -12,19 +13,18 @@ open CardManagement.Client.TransactionsTableComponent
 open CardManagement.Client.TransactionModalComponent
 open CardManagement.Client.WebApi
 open CardManagement.Client.ErrorComponent
+open Feliz.Router
 open Fable.Core.JS
 
 [<ReactComponent>]
-let HomeBodyComponent (cards: Card seq) =
-    let card, setCard = React.useState<Card>(Seq.item 0 cards)
-    let modalState, toggleState = React.useState(false)
+let HomeBodyComponent (cards: Card seq) (currentCard: Card) =
+    let modalState, toggleState = React.useState false
     let error, setError = React.useState<IMessage option> None
     
-    let changeCard id =
-        cards
-        |> Seq.find (fun currentCard -> currentCard.Id = id)
-        |> setCard
-    
+    let changeCard (id: Guid) =
+        Router.formatPath("home", [ "id", id.ToString() ])
+        |> Router.navigatePath
+        
     let createTransaction (transactionInput: ITransactionModalComponent) = async {
         try
             let code = int64(transactionInput.Code)
@@ -34,7 +34,7 @@ let HomeBodyComponent (cards: Card seq) =
                 Code = code
                 CardIdSender = transactionInput.CardIdSender
             }
-            let! result = cardsStore.CreateTransaction newTransactionInput
+            let! result = createCardsStore().CreateTransaction newTransactionInput
             match result with
             | Error error ->
                 { Message = error.Message; Color = "#f14668" } |> Some |> setError
@@ -61,7 +61,7 @@ let HomeBodyComponent (cards: Card seq) =
                             if error.IsSome then ErrorComponent error.Value.Message 20 20 error.Value.Color
                         ]
                     ]
-                    TransactionModalComponent card.Id (CardComponent card) (fun v -> createTransaction v |> Async.StartImmediate)
+                    TransactionModalComponent currentCard.Id (CardComponent currentCard) (fun v -> createTransaction v |> Async.StartImmediate)
                     Bulma.modalClose [
                         prop.onClick (fun _ -> toggleState(false))
                     ]
@@ -92,7 +92,7 @@ let HomeBodyComponent (cards: Card seq) =
                                     style.justifyContent.spaceBetween
                                 ]
                                 prop.children [
-                                    CardComponent card 
+                                    CardComponent currentCard 
                                     CardActionButtonsComponent (fun _ -> toggleState true)
                                 ]
                             ]
@@ -100,7 +100,8 @@ let HomeBodyComponent (cards: Card seq) =
                                 prop.style [
                                     style.backgroundColor "#FAFAFB"
                                     style.borderRadius 12
-                                    style.height.maxContent
+                                    style.width 650
+                                    style.height 300
                                 ]
                                 prop.children [
                                     Html.h1 [
@@ -113,12 +114,12 @@ let HomeBodyComponent (cards: Card seq) =
                                         ]
                                         prop.text "Insights"
                                     ]
-                                    ChartComponent 650 250 card.Id
+                                    ChartComponent 650 250 currentCard.Id
                                 ]
                             ]
                         ]
                     ]
-                    TransactionsTableComponent card.Id
+                    TransactionsTableComponent currentCard.Id
                 ]
             ]
         ]

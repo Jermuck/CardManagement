@@ -26,50 +26,69 @@ let createGradient (id: string) color =
     ]
 
 [<ReactComponent>]
-let ChartComponent width height cardId =
+let ChartComponent (width: int) (height: int) cardId =
     let getData() = async {
-        let! result = chartStore.GetCoordinates cardId
+        let! result = createChartStore().GetCoordinates cardId
         match result with
         | Error _ -> return []
         | Ok v -> return Seq.toList v
     }
     
-    let result = React.useDeferred(getData(), [|box cardId|])
+    let request = React.useDeferred(getData(), [|box cardId|])
     
-    let data =
-        match result with
-        | Deferred.Resolved v -> printfn "%A" v; v
-        | _ -> List.empty
+    match request with
+    | Deferred.Resolved data ->
+         match data.IsEmpty with
+         | true ->
+            Html.div [
+                prop.style [
+                    style.width width
+                    style.height height
+                    style.display.flex
+                    style.justifyContent.center
+                    style.alignItems.center
+                ]
+                prop.children [
+                    Html.h1 [
+                        prop.style [
+                            style.marginBottom 28
+                        ]
+                        prop.text "Empty Insights"
+                    ]
+                ]
+            ]
+         | false -> 
+             Recharts.areaChart [
+                areaChart.width width
+                areaChart.height height
+                areaChart.data data
+                areaChart.margin(top=10, right=30)
+                areaChart.children [
+                    Svg.defs [
+                        createGradient "colorUv" "red"
+                        createGradient "colorPv" "#82ca9d"
+                    ]
+                    Recharts.xAxis [ xAxis.dataKey (fun point -> point.Name) ]
+                    Recharts.yAxis [ ]
+                    Recharts.tooltip [ ]
+                    Recharts.cartesianGrid [ cartesianGrid.strokeDasharray(3, 3) ]
+
+                    Recharts.area [
+                        area.monotone
+                        area.dataKey (fun point -> point.Uv)
+                        area.stroke "red"
+                        area.fillOpacity 1
+                        area.fill "url(#colorUv)"
+                    ]
+
+                    Recharts.area [
+                        area.monotone
+                        area.dataKey (fun point -> point.Pv)
+                        area.stroke "#82ca9d"
+                        area.fillOpacity 1
+                        area.fill "url(#colorPv)"
+                    ]
+                ]
+            ]
+    | _ -> Html.none
     
-    Recharts.areaChart [
-        areaChart.width width
-        areaChart.height height
-        areaChart.data data
-        areaChart.margin(top=10, right=30)
-        areaChart.children [
-            Svg.defs [
-                createGradient "colorUv" "red"
-                createGradient "colorPv" "#82ca9d"
-            ]
-            Recharts.xAxis [ xAxis.dataKey (fun point -> point.Name) ]
-            Recharts.yAxis [ ]
-            Recharts.tooltip [ ]
-            Recharts.cartesianGrid [ cartesianGrid.strokeDasharray(3, 3) ]
-
-            Recharts.area [
-                area.monotone
-                area.dataKey (fun point -> point.Uv)
-                area.stroke "red"
-                area.fillOpacity 1
-                area.fill "url(#colorUv)"
-            ]
-
-            Recharts.area [
-                area.monotone
-                area.dataKey (fun point -> point.Pv)
-                area.stroke "#82ca9d"
-                area.fillOpacity 1
-                area.fill "url(#colorPv)"
-            ]
-        ]
-    ]

@@ -12,7 +12,7 @@ let inline CreateApiProxy<'a> () =
     |> Remoting.withRouteBuilder BuildApiRoute 
     |> Remoting.buildProxy<'a>
 
-let userStore = CreateApiProxy<IUsersStore>()    
-let profileStore = CreateApiProxy<IProfileStore>()
-let cardsStore = CreateApiProxy<ICardsStore>()
-let chartStore = CreateApiProxy<IChartStore>()
+let createUserStore() = CreateApiProxy<IUsersStore>()    
+let createProfileStore() = CreateApiProxy<IProfileStore>()
+let createCardsStore() = CreateApiProxy<ICardsStore>()
+let createChartStore() = CreateApiProxy<IChartStore>()
