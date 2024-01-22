@@ -1,16 +1,18 @@
 module CardManagement.Server.ChartStore
 
-open CardManagement.Shared.Core
-open CardManagement.Shared.Types
-open CardManagement.Shared.Utils
-open CardManagement.Database.TransactionsRepository
+open CardManagement.Shared
+open CardManagement.Database
+open Core
+open Types
+open Utils
+open TransactionsRepository
 
 let private getCoordinates cardId = async {
     try
         let! transactionsByCard = getTransactionsByCardId cardId
         let! transactionsToUserId = getTransactionsToCardId cardId
         let allTransactions = Seq.concat [transactionsByCard; transactionsToUserId] |> Seq.sortBy (_.CreateDate)
-        let mapToPoint (transaction: Transaction) =
+        let mapToPoint transaction =
             let uv =
                 allTransactions
                 |> Seq.filter (fun v -> v.CreateDate.Day = transaction.CreateDate.Day && v.CardId = cardId)
@@ -34,4 +36,3 @@ let getChartStoreImplementation _: IChartStore =
     {
         GetCoordinates = getCoordinates
     }
-

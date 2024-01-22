@@ -3,7 +3,7 @@ module CardManagement.Infrastructure.UserActions
 open CardManagement.Shared.Types
 open System
 
-let buildUser (inputUser: InputUser): User =
+let buildUser (inputUser: InputUser) =
     {
         Id = Guid.NewGuid()
         Name = inputUser.Name

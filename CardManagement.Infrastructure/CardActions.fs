@@ -1,27 +1,54 @@
 module CardManagement.Infrastructure.CardActions
 
 open System
-open CardManagement.Shared.Types
+open CardManagement.Shared
+open Types
 
-let deactivate (card: Card) =
-    match card.Status with
-    | Activate -> { card with Status = Deactivate }
-    | Deactivate -> card
-
-let activate (card: Card) =
-    match card.Status with
-    | Deactivate -> {card with Status = Activate }
-    | Activate -> card
-
-let private getCardExpired (card: Card) =
+let private getCardExpired card =
     let now = DateTime.Now
     card.LifeTime > now
+    
+let private buildTransaction cardId sumTransaction toCardId message =
+    {
+        Id = Guid.NewGuid()
+        CardId = cardId
+        Sum = sumTransaction
+        CreateDate = DateTime.Now
+        ToCardId = toCardId
+        Message = message 
+    }
+    
+let private makeTransaction (card: Card) sumTransaction toCardId message =
+    let newTransaction = buildTransaction card.Id sumTransaction toCardId message
+    { card with Transactions = [newTransaction] |> Seq.append card.Transactions }
 
-let private getValidBalance (card: Card) (sum: int) =
+let private getTransactionsSum transactions =
+    transactions
+    |> Seq.filter (fun e -> e.CreateDate.Day = DateTime.Now.Day)
+    |> Seq.map (_.Sum)
+    |> Seq.sum
+
+let private getPossiblyTransaction card amount =
+    let transactionsSum = getTransactionsSum card.Transactions
+    match card.TypeCard with
+    | Priority -> transactionsSum + amount <= 300_000
+    | Basic -> transactionsSum + amount <= 100_000
+
+let private getValidBalance card sum =
     let remnant = card.Balance - sum
     if remnant >= 0 then Some remnant
     else None
     
+let deactivate card =
+    match card.Status with
+    | Activate -> { card with Status = Deactivate }
+    | Deactivate -> card
+
+let activate card =
+    match card.Status with
+    | Deactivate -> {card with Status = Activate }
+    | Activate -> card
+
 let getIsAvailableCard (user: User) =
     if user.Salary >= 100_000 then seq [ Priority; Basic ]
     else [ Basic ]
@@ -30,10 +57,9 @@ let buildCode() =
    let random = Random()
    let code = int64(Math.Abs(random.Next(100_000_000, 999_999_999))).ToString()
    let endCode = Math.Abs(random.Next(1_000_000, 9_999_999)).ToString()
-   printfn "%A" (code + endCode)
    int64(code + endCode)
    
-let buildCard (user: User) (typeCard: TypeOfCard) (balance: int) =
+let buildCard user typeCard balance =
     let random = Random()
     let code = buildCode()
     let CVV = random.Next(100, 999)
@@ -52,33 +78,7 @@ let buildCard (user: User) (typeCard: TypeOfCard) (balance: int) =
     }
     card
 
-let private buildTransaction cardId sumTransaction toCardId message =
-    {
-        Id = Guid.NewGuid()
-        CardId = cardId
-        Sum = sumTransaction
-        CreateDate = DateTime.Now
-        ToCardId = toCardId
-        Message = message 
-    }
-    
-let private makeTransaction (card: Card) (sumTransaction: int) (toCardId: Guid) (message: string) =
-    let newTransaction = buildTransaction card.Id sumTransaction toCardId message
-    { card with Transactions = [newTransaction] |> Seq.append card.Transactions }
-
-let private getTransactionsSum transactions =
-    transactions
-    |> Seq.filter (fun e -> e.CreateDate.Day = DateTime.Now.Day)
-    |> Seq.map (_.Sum)
-    |> Seq.sum
-
-let private getPossiblyTransaction (card: Card) (amount: int) =
-    let transactionsSum = getTransactionsSum card.Transactions
-    match card.TypeCard with
-    | Priority -> transactionsSum + amount <= 300_000
-    | Basic -> transactionsSum + amount <= 100_000
-    
-let processPayment (card: Card) (amount: int) (toCardId: Guid) (message: string) =
+let processPayment card amount toCardId message =
     match card.Status with
     | Deactivate -> Error { Message = "Card deactivate" }
     | Activate ->

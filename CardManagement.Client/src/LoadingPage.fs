@@ -27,5 +27,3 @@ let LoadingPage() =
             ]
         ]
     ]
-
-

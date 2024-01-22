@@ -2,8 +2,9 @@ module CardManagement.Database.DatabaseContext
 
 open SqlHydra.Query
 open Npgsql
-open CardManagement.Database.Settings
-open CardManagement.Database.``public``
+open CardManagement.Database
+open Settings
+open ``public``
 
 let openContext() = 
     let compiler = SqlKata.Compilers.PostgresCompiler()

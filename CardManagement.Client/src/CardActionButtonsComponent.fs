@@ -4,7 +4,7 @@ open Feliz
 open Feliz.Bulma
 
 [<ReactComponent>]
-let CardActionButtonsComponent createTransaction =
+let CardActionButtonsComponent createTransaction blockCard =
     Html.div [
         prop.style [
             style.backgroundColor "#FAFAFB"
@@ -18,6 +18,7 @@ let CardActionButtonsComponent createTransaction =
             Bulma.button.button [
                 Bulma.color.isDanger
                 prop.text "Block"
+                prop.onClick blockCard
             ]
             Bulma.button.button [
                 Bulma.color.isPrimary

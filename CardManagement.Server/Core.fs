@@ -1,8 +1,9 @@
 ﻿module CardManagement.Server.Core
 
 open Microsoft.AspNetCore.Hosting
-open CardManagement.Server.ServerConfiguration
 open Microsoft.Extensions.Hosting
+open CardManagement.Server
+open ServerConfiguration
 
 [<EntryPoint>]
 let main _ =

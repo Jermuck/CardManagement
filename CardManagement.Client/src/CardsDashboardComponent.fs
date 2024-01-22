@@ -1,11 +1,12 @@
 module CardManagement.Client.CardsDashboardComponent
 
 open System
-open CardManagement.Client.Types
-open CardManagement.Shared.Types
-open CardManagement.Client.CardComponent
-open Feliz.Bulma
 open Feliz
+open Feliz.Bulma
+open CardManagement.Client
+open CardManagement.Shared
+open Types
+open CardComponent
 
 [<ReactComponent>]
 let CardsDashboardComponent (data: Card seq) (onClick: Guid -> unit) =
@@ -43,10 +44,10 @@ let CardsDashboardComponent (data: Card seq) (onClick: Guid -> unit) =
         |> Seq.filter sortCards
         |> setCards
     
-    let search (value: string) =
+    let search value =
         setInput value
         if value.Length > 0 then
-            cards
+            data
             |> Seq.filter (fun card -> card.Code.ToString().Contains value)
             |> setCards
         else

@@ -1,11 +1,14 @@
 module CardManagement.Client.ChartComponent
 
-open CardManagement.Shared.Types
 open Feliz
 open Feliz.Recharts
 open Feliz.UseDeferred
-open CardManagement.Client.WebApi
+open CardManagement.Shared
+open CardManagement.Client
+open WebApi
+open Types
 
+[<ReactComponent>]
 let createGradient (id: string) color =
     Svg.linearGradient [
         svg.id id
@@ -28,7 +31,7 @@ let createGradient (id: string) color =
 [<ReactComponent>]
 let ChartComponent (width: int) (height: int) cardId =
     let getData() = async {
-        let! result = createChartStore().GetCoordinates cardId
+        let! result = chartStore.GetCoordinates cardId
         match result with
         | Error _ -> return []
         | Ok v -> return Seq.toList v
@@ -72,7 +75,6 @@ let ChartComponent (width: int) (height: int) cardId =
                     Recharts.yAxis [ ]
                     Recharts.tooltip [ ]
                     Recharts.cartesianGrid [ cartesianGrid.strokeDasharray(3, 3) ]
-
                     Recharts.area [
                         area.monotone
                         area.dataKey (fun point -> point.Uv)
@@ -80,7 +82,6 @@ let ChartComponent (width: int) (height: int) cardId =
                         area.fillOpacity 1
                         area.fill "url(#colorUv)"
                     ]
-
                     Recharts.area [
                         area.monotone
                         area.dataKey (fun point -> point.Pv)
@@ -91,4 +92,3 @@ let ChartComponent (width: int) (height: int) cardId =
                 ]
             ]
     | _ -> Html.none
-    

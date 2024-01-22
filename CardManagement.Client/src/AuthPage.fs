@@ -1,38 +1,19 @@
 module CardManagement.Client.Pages.AuthPage
 
-open CardManagement.Client.Inputs
-open CardManagement.Client.ErrorComponent
-open CardManagement.Client.Utils
-open CardManagement.Shared.Types
-open CardManagement.Shared.Core
-open CardManagement.Client.WebApi
-open CardManagement.Client.Types
 open Feliz.Bulma
-open Microsoft.FSharp.Control
-open Feliz.Router
 open Feliz
+open CardManagement.Client
+open CardManagement.Shared.Types
+open Inputs
+open ErrorComponent
+open Types
+open WebApi
+open Utils
 
-let private initialStateUser = { Name = ""; Surname = ""; Patronymic = ""; Password = ""; Age = 0; Salary = 0; Email = "" }
+let initialStateUser = { Name = ""; Surname = ""; Patronymic = ""; Password = ""; Age = 0; Salary = 0; Email = "" }
 
-let private validatePassword (password: string) repeatPassword =
+let private validatePassword password repeatPassword =
     password = repeatPassword
-
-let getCards() = async {
-    try
-        let! result = createCardsStore().Get()
-        match result with
-        | Error _ -> return Seq.empty
-        | Ok data -> return data
-    with
-        | ex -> printfn "%A" ex; return Seq.empty
-}
-
-let getRoute (data: Card seq) =
-    match Seq.isEmpty data with
-    | true -> Router.formatPath [ "cards" ; "create" ]
-    | false ->
-        let card = Seq.item 0 data
-        Router.formatPath("home", [ "id", card.Id.ToString() ])
 
 let private validateFieldsRegistrationUser (user: InputUser) repeatPassword =
     if user.Name.Length < 4 then Some "Not correct Name field"
@@ -52,18 +33,18 @@ let private validateFieldsLoginUser (email: string) (password: string) repeatPas
     else None
 
 [<ReactComponent>]
-let RegistrationForm (setTypeAuthorization: TypeAuthorization -> unit) =
+let RegistrationForm setTypeAuthorization =
     let user, setUser = React.useState initialStateUser
     let repeatPassword, setRepeatPassword = React.useState ""
     let error, setError = React.useState ""
     
     let register() = async {
         try
-            let! result = createUserStore().Register user
+            let! result = userStore.Register user
             match result with
             | Ok (_, token) ->
                 Browser.WebStorage.localStorage.setItem("token", token.Token)
-                navigate [ "cards"; "create" ]
+                navigate [ "home" ]
                 Browser.Dom.window.location.reload()
             | Error err -> setError err.Message
         with
@@ -102,14 +83,14 @@ let RegistrationForm (setTypeAuthorization: TypeAuthorization -> unit) =
                     style.fontSize 12
                 ]
                 prop.children [
-                    InputText "Your name" "Name" Text (fun v -> setUser { user with Name = v }) 
-                    InputText "Your surname" "Surname" Text (fun v -> setUser { user with Surname = v })
-                    InputText "Your patronymic" "Patronymic" Text (fun v -> setUser { user with Patronymic =  v })
-                    InputText "Your email" "Email" Text (fun v -> setUser { user with Email = v })
-                    InputText "Your password" "Password" Password (fun v -> setUser { user with Password = v })
-                    InputText "Repeat your password" "Repeat Password" Password setRepeatPassword
-                    InputNumber "Your age" "Age" (fun v -> setUser {user with Age = v })
-                    InputNumber "Your salary" "Salary" (fun v -> setUser { user with Salary = v })
+                    InputText "Your name" "Name" Text (fun v -> setUser { user with Name = v }) None
+                    InputText "Your surname" "Surname" Text (fun v -> setUser { user with Surname = v }) None
+                    InputText "Your patronymic" "Patronymic" Text (fun v -> setUser { user with Patronymic =  v }) None
+                    InputText "Your email" "Email" Text (fun v -> setUser { user with Email = v }) None
+                    InputText "Your password" "Password" Password (fun v -> setUser { user with Password = v }) None
+                    InputText "Repeat your password" "Repeat Password" Password setRepeatPassword None
+                    InputNumber "Your age" "Age" (fun v -> setUser {user with Age = v }) None
+                    InputNumber "Your salary" "Salary" (fun v -> setUser { user with Salary = v }) None
                     Html.div [
                         prop.style [
                             style.display.flex
@@ -140,7 +121,7 @@ let RegistrationForm (setTypeAuthorization: TypeAuthorization -> unit) =
     ]
     
 [<ReactComponent>]
-let LoginForm (setTypeAuthorization: TypeAuthorization -> unit) =
+let LoginForm setTypeAuthorization =
     let error, setError = React.useState ""
     let email, setEmail = React.useState ""
     let password, setPassword = React.useState ""
@@ -148,13 +129,11 @@ let LoginForm (setTypeAuthorization: TypeAuthorization -> unit) =
     
     let login() = async {
         try
-            let! result = createUserStore().Login email password
+            let! result = userStore.Login email password
             match result with
             | Ok (_, token) ->
                 Browser.WebStorage.localStorage.setItem("token", token.Token)
-                let! isExistCards = getCards()
-                let route = getRoute isExistCards
-                navigate [ route ]
+                navigate [ "home" ]
                 Browser.Dom.window.location.reload()
             | Error error -> setError error.Message 
         with
@@ -193,9 +172,9 @@ let LoginForm (setTypeAuthorization: TypeAuthorization -> unit) =
                     style.fontSize 12
                 ]
                 prop.children [
-                    InputText "Your email" "Email" Text setEmail
-                    InputText "Your password" "Password" Password setPassword
-                    InputText "Repeat your password" "Repeat Password" Password setRepeatPassword
+                    InputText "Your email" "Email" Text setEmail None
+                    InputText "Your password" "Password" Password setPassword None
+                    InputText "Repeat your password" "Repeat Password" Password setRepeatPassword None
                     Html.div [
                         prop.style [
                             style.display.flex

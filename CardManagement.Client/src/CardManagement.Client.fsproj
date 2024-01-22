@@ -7,7 +7,6 @@
     <None Include="index.html" />
     <Content Include="styles.css" />
     <Compile Include="Types.fs" />
-    <Compile Include="Extensions.fs" />
     <Compile Include="WebApi.fs" />
     <Compile Include="Utils.fs" />
     <Compile Include="Inputs.fs" />
@@ -26,6 +25,7 @@
     <Compile Include="CardsPage.fs" />
     <Compile Include="HomePage.fs" />
     <Compile Include="AuthPage.fs" />
+    <Compile Include="SettingsPage.fs" />
     <Compile Include="Routes.fs" />
     <Compile Include="Main.fs" />
   </ItemGroup>

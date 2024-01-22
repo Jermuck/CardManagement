@@ -5,10 +5,13 @@ open System.Runtime.CompilerServices
 open System.Security.Cryptography
 open Microsoft.AspNetCore.Cryptography.KeyDerivation
 
+[<Literal>]
 let private saltSize = 16
 
+[<Literal>]
 let private numBytesRequested = 32
 
+[<Literal>]
 let private iterationCount = 10000
 
 [<MethodImpl(MethodImplOptions.NoInlining ||| MethodImplOptions.NoOptimization)>]
@@ -41,7 +44,6 @@ let createHash password =
     let salt = Array.zeroCreate<Byte> saltSize
     rng.GetBytes(salt)
     let subKey = KeyDerivation.Pbkdf2(password, salt, KeyDerivationPrf.HMACSHA256, iterationCount, numBytesRequested)
-
     let outputBytes = Array.zeroCreate<Byte> (13 + salt.Length + subKey.Length)
     outputBytes[0] <- 0x01 |> byte
     writeNetworkByteOrder outputBytes 1 (KeyDerivationPrf.HMACSHA256 |> uint32)
@@ -49,7 +51,6 @@ let createHash password =
     writeNetworkByteOrder outputBytes 9 (saltSize |> uint32)
     Buffer.BlockCopy(salt, 0, outputBytes, 13, salt.Length)
     Buffer.BlockCopy(subKey, 0, outputBytes, 13 + salt.Length, subKey.Length)
-
     outputBytes
     |> Convert.ToBase64String
 
@@ -58,13 +59,10 @@ let verifyPassword hash password =
     let prf : KeyDerivationPrf = readNetworkByteOrder hashedPassword 1 |> int |> enum
     let iterCount = readNetworkByteOrder hashedPassword 5 |> int
     let saltLength = readNetworkByteOrder hashedPassword 9 |> int
-
     let currentSalt = Array.zeroCreate<Byte> saltLength
     Buffer.BlockCopy(hashedPassword, 13, currentSalt, 0, currentSalt.Length)
-
     let subKeyLength = hashedPassword.Length - 13 - currentSalt.Length
     let expectedSubKey = Array.zeroCreate<Byte> subKeyLength
     Buffer.BlockCopy(hashedPassword, 13 + currentSalt.Length, expectedSubKey, 0, expectedSubKey.Length)
     let actualSubKey = KeyDerivation.Pbkdf2(password, currentSalt, prf, iterCount, subKeyLength)
     bytesAreEqual actualSubKey expectedSubKey
-

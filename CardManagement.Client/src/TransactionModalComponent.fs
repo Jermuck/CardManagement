@@ -50,7 +50,8 @@ let TransactionModalComponent cardId cardComponent (onClick: ITransactionModalCo
                                     ]
                                     Bulma.control.div [
                                         Bulma.input.text [
-                                            prop.onChange setCode
+                                            prop.onChange (fun (e: string) -> e.Replace(" ", "") |> setCode)
+                                            prop.value code
                                             prop.placeholder "•••• •••• •••• ••••"
                                         ]
                                     ]

@@ -1,27 +1,27 @@
 module CardManagement.Client.HomeBodyComponent
 
-open System
-open CardManagement.Client.Types
 open Feliz
 open Feliz.Bulma
-open CardManagement.Client.CardsDashboardComponent
-open CardManagement.Client.CardComponent
-open CardManagement.Client.CardActionButtonsComponent
-open CardManagement.Client.ChartComponent
-open CardManagement.Shared.Types
-open CardManagement.Client.TransactionsTableComponent
-open CardManagement.Client.TransactionModalComponent
-open CardManagement.Client.WebApi
-open CardManagement.Client.ErrorComponent
 open Feliz.Router
 open Fable.Core.JS
+open CardManagement.Client
+open CardManagement.Shared
+open Types
+open CardsDashboardComponent
+open CardComponent
+open CardActionButtonsComponent
+open ChartComponent
+open TransactionsTableComponent
+open TransactionModalComponent
+open WebApi
+open ErrorComponent
 
 [<ReactComponent>]
 let HomeBodyComponent (cards: Card seq) (currentCard: Card) =
     let modalState, toggleState = React.useState false
     let error, setError = React.useState<IMessage option> None
     
-    let changeCard (id: Guid) =
+    let changeCard id =
         Router.formatPath("home", [ "id", id.ToString() ])
         |> Router.navigatePath
         
@@ -34,7 +34,7 @@ let HomeBodyComponent (cards: Card seq) (currentCard: Card) =
                 Code = code
                 CardIdSender = transactionInput.CardIdSender
             }
-            let! result = createCardsStore().CreateTransaction newTransactionInput
+            let! result = cardsStore.CreateTransaction newTransactionInput
             match result with
             | Error error ->
                 { Message = error.Message; Color = "#f14668" } |> Some |> setError
@@ -45,6 +45,17 @@ let HomeBodyComponent (cards: Card seq) (currentCard: Card) =
         with
             | ex -> printfn "%A" ex; 
     }
+    
+    let blockCard() = async {
+        try
+            let! result = cardsStore.BlockCard currentCard.Id
+            match result with
+            | Error _ -> ()
+            | Ok _ ->
+                Browser.Dom.window.location.reload()
+        with
+            | ex -> printfn "%A" ex; 
+    }
         
     Html.div [
         prop.style [
@@ -52,6 +63,7 @@ let HomeBodyComponent (cards: Card seq) (currentCard: Card) =
             style.display.flex
         ]
         prop.children [
+            if error.IsSome then ErrorComponent error.Value.Message 20 20 error.Value.Color
             Bulma.modal [
                 prop.id "modal-sample"
                 if modalState then modal.isActive
@@ -92,8 +104,28 @@ let HomeBodyComponent (cards: Card seq) (currentCard: Card) =
                                     style.justifyContent.spaceBetween
                                 ]
                                 prop.children [
-                                    CardComponent currentCard 
-                                    CardActionButtonsComponent (fun _ -> toggleState true)
+                                    Html.div [
+                                        if currentCard.Status = Deactivate
+                                        then
+                                            prop.style [
+                                                style.opacity 0.2
+                                                style.pointerEvents.none
+                                            ]
+                                        prop.children [
+                                            CardComponent currentCard
+                                        ]
+                                    ]
+                                    Html.div [
+                                        if currentCard.Status = Deactivate
+                                        then
+                                            prop.style [
+                                                style.opacity 0.2
+                                                style.pointerEvents.none
+                                            ]
+                                        prop.children [
+                                            CardActionButtonsComponent (fun _ -> toggleState true) (fun _ -> blockCard() |> Async.StartImmediate)
+                                        ]
+                                    ]
                                 ]
                             ]
                             Html.div [

@@ -18,4 +18,3 @@ let ErrorComponent (text: string) (right: int) (top: int) (color: string) =
             style.zIndex 1000
         ]
     ]
-

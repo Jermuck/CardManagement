@@ -1,21 +1,19 @@
 module CardManagement.Database.CardsRepository
 
-open System
-open CardManagement.Database
-open CardManagement.Database.``public``
-open CardManagement.Database.DatabaseContext
-open CardManagement.Shared.Types
-open CardManagement.Database.Mappers
 open SqlHydra.Query
+open CardManagement.Database
+open ``public``
+open DatabaseContext
+open Mappers
 
-let saveCard (card: Card) =
+let saveCard card =
     let dbCard = mapCardToDB card
     insertAsync (Create openContext) {
         into cards
         entity dbCard
     }
 
-let getCards (userId: Guid) = async {
+let getCards userId = async {
     let! cards = selectAsync HydraReader.Read (Create openContext) {
         for card in cards do
         where (card.user_id = userId)
@@ -24,7 +22,17 @@ let getCards (userId: Guid) = async {
     return cards |> Seq.map mapDBCardToDomain
 }
 
-let tryFindCardByCode (code: int64) = async {
+let getCardsWithTransactions userId = async {
+    let! cards = selectAsync HydraReader.Read (Create openContext) {
+        for card in cards do
+        join transaction in transactions on (card.id = transaction.card_id)
+        where (card.user_id = userId)
+        select (card, transaction)
+    }
+    return cards
+}
+
+let tryFindCardByCode code = async {
     let! cards = selectAsync HydraReader.Read (Create openContext) {
         for card in cards do
         where (card.code = code)
@@ -35,9 +43,17 @@ let tryFindCardByCode (code: int64) = async {
     | false -> return cards |> Seq.item 0 |> mapDBCardToDomain |> Some  
 }
 
-let updateCardBalanceById (cardId: Guid) (balance: int) =
+let updateCardBalanceById cardId balance =
     updateAsync (Create openContext) {
         for card in cards do
         set card.balance balance
+        where (card.id = cardId)
+    }
+    
+let updateStatusCard cardId status =
+    let dbStatus = mapStatusOfCardToDB status
+    updateAsync (Create openContext) {
+        for card in cards do
+        set card.status dbStatus
         where (card.id = cardId)
     }

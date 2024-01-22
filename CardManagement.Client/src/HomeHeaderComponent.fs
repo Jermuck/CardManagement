@@ -37,10 +37,18 @@ let HomeHeaderComponent() =
                 ]
                 prop.children [
                     Bulma.navbarStart.div [
-                        Bulma.navbarItem.a [ prop.text "Cards" ]
-                        Bulma.navbarItem.a [ prop.text "Transactions" ]
-                        Bulma.navbarItem.a [ prop.text "Settings" ]
-                        Bulma.navbarItem.a [ prop.text "About" ]
+                        Bulma.navbarItem.a [
+                            prop.text "Home"
+                            prop.onClick (fun _ -> navigate [ "home" ])
+                        ]
+                        Bulma.navbarItem.a [
+                            prop.text "Create card"
+                            prop.onClick (fun _ -> navigate [ "cards"; "create" ])
+                        ]
+                        Bulma.navbarItem.a [
+                            prop.text "Settings"
+                            prop.onClick (fun _ -> navigate [ "settings" ])
+                        ]
                     ]
                 ]
             ]

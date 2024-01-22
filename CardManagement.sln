@@ -4,8 +4,6 @@ Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "CardManagement.Server", "Ca
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "CardManagement.Client", "CardManagement.Client\src\CardManagement.Client.fsproj", "{FF0DA3D3-0A0E-4601-9E73-6B8DE6DB7A6A}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "CardManagement.Tests", "CardManagement.Tests\CardManagement.Tests.fsproj", "{2B013202-37CA-4F48-BB04-58135FE829D1}"
-EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "CardManagement.Database", "CardManagement.Database\CardManagement.Database.fsproj", "{92C53570-432D-45A4-8CD7-EE666A553D77}"
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "CardManagement.Infrastructure", "CardManagement.Infrastructure\CardManagement.Infrastructure.fsproj", "{F2BB6371-D6FD-4DE8-B568-D20298C1A300}"
@@ -32,10 +30,6 @@ Global
 		{FF0DA3D3-0A0E-4601-9E73-6B8DE6DB7A6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FF0DA3D3-0A0E-4601-9E73-6B8DE6DB7A6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FF0DA3D3-0A0E-4601-9E73-6B8DE6DB7A6A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2B013202-37CA-4F48-BB04-58135FE829D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2B013202-37CA-4F48-BB04-58135FE829D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2B013202-37CA-4F48-BB04-58135FE829D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2B013202-37CA-4F48-BB04-58135FE829D1}.Release|Any CPU.Build.0 = Release|Any CPU
 		{92C53570-432D-45A4-8CD7-EE666A553D77}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{92C53570-432D-45A4-8CD7-EE666A553D77}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{92C53570-432D-45A4-8CD7-EE666A553D77}.Release|Any CPU.ActiveCfg = Release|Any CPU

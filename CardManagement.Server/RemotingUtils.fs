@@ -3,18 +3,18 @@ module CardManagement.Server.RemotingUtils
 open System
 open Fable.Remoting.Server
 open Fable.Remoting.Giraffe
-open CardManagement.Shared.Utils
 open Microsoft.AspNetCore.Http
+open CardManagement.Shared.Utils
 
 let createPublicHandler controller = 
     Remoting.createApi()
-    |> Remoting.withRouteBuilder BuildApiRoute
+    |> Remoting.withRouteBuilder buildApiRoute
     |> Remoting.fromValue controller
     |> Remoting.buildHttpHandler
 
 let createPrivateHandler securedService =
     Remoting.createApi()
-    |> Remoting.withRouteBuilder BuildApiRoute
+    |> Remoting.withRouteBuilder buildApiRoute
     |> Remoting.fromContext securedService // <-- we need context here
     |> Remoting.buildHttpHandler
     

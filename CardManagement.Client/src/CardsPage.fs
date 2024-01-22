@@ -1,18 +1,22 @@
 module CardManagement.Client.Pages.CardsPage
 
 open System
-open CardManagement.Client.CardFormComponent
-open CardManagement.Client.CardComponent
-open CardManagement.Client.ErrorComponent
-open CardManagement.Client.HomeHeaderComponent
 open Feliz
 open Feliz.Router
-open CardManagement.Shared.Types
 open Fable.Core.JS
-open CardManagement.Client.WebApi
-open CardManagement.Client.Types
+open CardManagement.Client
+open CardManagement.Shared
+open CardFormComponent
+open CardComponent
+open ErrorComponent
+open HomeHeaderComponent
+open Types
+open WebApi
 
+[<Literal>]
 let priorityCardText = "The Priority Bank Card is a premium offering designed for customers who value exclusive benefits and personalized services. With this card, you can enjoy a range of privileges such as access to airport lounges, concierge services, travel insurance, and higher cashback or reward points on your purchases. The Priority Bank Card is tailored for individuals who frequently travel, dine out, or engage in luxury experiences. It offers enhanced security features and provides a higher credit limit to meet your financial needs. Experience the convenience and prestige of the Priority Bank Card."
+
+[<Literal>]
 let basicCardText = "The Basic Bank Card is a simple and straightforward option suitable for everyday banking needs. It provides essential features and functionality without any frills or additional perks. With this card, you can make purchases at various merchants, withdraw cash from ATMs, and manage your finances conveniently. The Basic Bank Card is ideal for individuals who prefer a no-nonsense approach to banking and want a reliable payment method for their day-to-day transactions. It offers ease of use, affordability, and peace of mind for your basic banking requirements."
 
 [<ReactComponent>]
@@ -40,7 +44,7 @@ let CardsPage() =
     let createCard (typeCard: TypeOfCard) = async {
         try
             setError None
-            let! newCard = createCardsStore().Create typeCard
+            let! newCard = cardsStore.CreateCard typeCard
             match newCard with
             | Error error ->
                 { Message = error.Message; Color = "#f14668" } |> Some |> setError

@@ -9,14 +9,16 @@ type IUsersStore = {
 }
 
 type ICardsStore = {
-    Get: unit -> Async<ResponseResult<Card seq>>
-    Create: TypeOfCard -> Async<ResponseResult<Card>>
+    GetCards: unit -> Async<ResponseResult<Card seq>>
+    CreateCard: TypeOfCard -> Async<ResponseResult<Card>>
     CreateTransaction: TransactionInput -> Async<ResponseResult<Transaction>>
     GetTransactions: Guid -> Async<ResponseResult<Transaction seq>>
+    BlockCard: Guid -> Async<ResponseResult<Card>>
 }
 
 type IProfileStore = {
     GetMyProfile: unit -> Async<ResponseResult<User>>
+    UpdateProfile: InputUser -> Async<ResponseResult<string>>
 }
 
 type IChartStore = {

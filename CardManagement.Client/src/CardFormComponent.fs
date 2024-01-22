@@ -1,8 +1,8 @@
 module CardManagement.Client.CardFormComponent
 
-open CardManagement.Client.Types
 open Feliz.Bulma
 open Feliz
+open CardManagement.Client.Types
 
 [<ReactComponent>]
 let CardFormComponent (props: ICardForm) =

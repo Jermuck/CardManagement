@@ -4,10 +4,12 @@ open System
 open Feliz
 open Feliz.Bulma
 open Feliz.DaisyUI
-open CardManagement.Client.WebApi
-open CardManagement.Shared.Types
-open CardManagement.Shared.Utils
 open Feliz.UseDeferred
+open CardManagement.Client
+open CardManagement.Shared
+open WebApi
+open Types
+open Utils
 
 [<ReactComponent>]
 let StatusTransactionComponent isMoneyIn =
@@ -25,7 +27,7 @@ let StatusTransactionComponent isMoneyIn =
 let TransactionsTableComponent cardId =
     let getTransactions() = async {
         try
-            let! result = createCardsStore().GetTransactions cardId
+            let! result = cardsStore.GetTransactions cardId
             match result with
             | Error _ -> return Seq.empty
             | Ok value -> return value
@@ -104,7 +106,6 @@ let TransactionsTableComponent cardId =
                 ]
         | _ -> Html.none
         
-    
     Html.div [
         prop.style [
             style.width (length.perc 95)

@@ -1,8 +1,8 @@
 module CardManagement.Database.Mappers
 
+open System
 open CardManagement.Database.``public``
 open CardManagement.Shared.Types
-open System
 
 let private convertTimeToDateOnly (time: DateTime) =
    DateOnly(time.Year, time.Month, time.Day)
@@ -10,29 +10,29 @@ let private convertTimeToDateOnly (time: DateTime) =
 let private convertTimeToDateTime (time: DateOnly) =
     DateTime(time.Year, time.Month, time.Day)
 
-let private mapTypeOfCardToDB (typeCard: TypeOfCard) =
+let mapTypeOfCardToDB typeCard =
     match typeCard with
     | Basic -> typeofcard.basic
     | Priority -> typeofcard.priority
 
-let private mapStatusOfCardToDB (status: TypeOfActivation) =
+let mapStatusOfCardToDB status =
     match status with
     | Activate -> statusofcard.activate
     | Deactivate -> statusofcard.deactivate
 
-let private mapTypeOfCardToDomain (typeCard: typeofcard) =
+let mapTypeOfCardToDomain typeCard =
     match typeCard with
     | typeofcard.basic -> Basic
     | typeofcard.priority -> Priority
     | _ -> Basic
 
-let private mapStatusOfCardToDomain (status: statusofcard) =
+let mapStatusOfCardToDomain status =
     match status with
     | statusofcard.activate -> Activate
     | statusofcard.deactivate -> Deactivate
     | _ -> Deactivate
 
-let mapUserToDB (user: User) =
+let mapUserToDB user =
     {
         id = user.Id
         name = user.Name
@@ -44,7 +44,7 @@ let mapUserToDB (user: User) =
         email = user.Email
     }
 
-let mapDBUserToDomain (user: users) =
+let mapDBUserToDomain user =
     {
         Id = user.id
         Name = user.name
@@ -57,7 +57,7 @@ let mapDBUserToDomain (user: users) =
         Cards = [] 
     }
 
-let mapCardToDB (card: Card) =
+let mapCardToDB card =
     let type_card = mapTypeOfCardToDB card.TypeCard
     let status = mapStatusOfCardToDB card.Status
     let lifeTime = convertTimeToDateOnly card.LifeTime
@@ -72,7 +72,7 @@ let mapCardToDB (card: Card) =
             status = status
     }
 
-let mapDBCardToDomain (card: cards) =
+let mapDBCardToDomain card =
     let typeCard = mapTypeOfCardToDomain card.type_card
     let status = mapStatusOfCardToDomain card.status
     let time = convertTimeToDateTime card.life_time
@@ -88,7 +88,7 @@ let mapDBCardToDomain (card: cards) =
         Transactions = [] 
     }
     
-let mapTransactionToDB (transaction: Transaction) =
+let mapTransactionToDB transaction =
     let date = convertTimeToDateOnly transaction.CreateDate
     {
         id = transaction.Id
@@ -99,7 +99,7 @@ let mapTransactionToDB (transaction: Transaction) =
         message = transaction.Message 
     }
     
-let mapDBTransactionToDomain (transaction: transactions) =
+let mapDBTransactionToDomain transaction =
     let time = convertTimeToDateTime transaction.create_date
     {
         Id = transaction.id

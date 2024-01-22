@@ -3,21 +3,28 @@ module CardManagement.Client.Routes
 open System
 open Feliz
 open Feliz.Router
-open CardManagement.Client.WebApi
-open CardManagement.Shared.Types
-open CardManagement.Client.Pages.HomePage
-open CardManagement.Client.Pages.AuthPage
-open CardManagement.Client.Pages.LoadingPage
-open CardManagement.Client.Pages.CardsPage
 open Feliz.UseDeferred
+open CardManagement.Client
+open CardManagement.Shared
+open Pages.HomePage
+open Pages.AuthPage
+open Pages.LoadingPage
+open Pages.CardsPage
+open Pages.SettingsPage
+open WebApi
+open Types
 
 type Page =
+    | Settings
+    | HomeWithoutArgs 
     | Home of cardId: Guid
     | Auth
     | NotFound
     | Cards
 
 let private parseUrl = function
+    | [ "settings" ] -> Page.Settings
+    | [ "home" ] -> Page.HomeWithoutArgs
     | [ "home"; Route.Query [ "id", Route.Guid cardId ]  ] -> Page.Home cardId
     | [ "authorization" ] -> Page.Auth
     | [ "cards"; "create" ] -> Page.Cards
@@ -25,6 +32,8 @@ let private parseUrl = function
 
 let private getPrivateRoutes pageUrl =
     match pageUrl with
+    | Settings -> SettingsPage()
+    | HomeWithoutArgs -> HomeWithoutArgsPage()
     | Home cardId -> HomePage cardId
     | Cards -> CardsPage()
     | _ -> Html.h1 "Not found"
@@ -40,7 +49,7 @@ let Router() =
     
     let getRoutesCallback() = async {
         try
-            let! profile = createProfileStore().GetMyProfile()
+            let! profile = profileStore.GetMyProfile()
             match profile with
             | Ok _ -> return getPrivateRoutes
             | Error _-> return getPublicRoutes
@@ -56,7 +65,6 @@ let Router() =
         | Deferred.InProgress -> LoadingPage()
         | Deferred.Failed error -> Html.div error.Message
         | Deferred.Resolved routeBuilderCallback -> routeBuilderCallback pageUrl
-    
     
     React.router [
         router.pathMode

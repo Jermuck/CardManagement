@@ -1,20 +1,19 @@
 module CardManagement.Database.TransactionsRepository
 
-open System
-open CardManagement.Shared.Types
-open CardManagement.Database.DatabaseContext
 open SqlHydra.Query
-open CardManagement.Database.Mappers
-open CardManagement.Database.``public``
+open CardManagement.Database
+open DatabaseContext
+open Mappers
+open ``public``
 
-let saveTransaction (transaction: Transaction) =
+let saveTransaction transaction =
     let mapToDBTransaction = mapTransactionToDB transaction
     insertAsync (Create openContext) {
         into transactions
         entity mapToDBTransaction
     }
     
-let getTransactionsByCardId (cardId: Guid) = async {
+let getTransactionsByCardId cardId = async {
     let! result = selectAsync HydraReader.Read (Create openContext) {
         for transaction in transactions do
         where (transaction.card_id = cardId)
@@ -23,7 +22,7 @@ let getTransactionsByCardId (cardId: Guid) = async {
     return result |> Seq.map mapDBTransactionToDomain
 }
 
-let getTransactionsToCardId (cardId: Guid) = async {
+let getTransactionsToCardId cardId = async {
     let! result = selectAsync HydraReader.Read (Create openContext) {
         for transaction in transactions do
         where (transaction.to_card_id = cardId)

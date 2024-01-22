@@ -11,6 +11,9 @@ let addBackSpaceToCardCode (code: string) =
 
 [<ReactComponent>]
 let CardComponent (card: Card) =
+    let code, setCode = React.useState ""
+    
+    React.useEffect((fun _ -> setCode(card.Code.ToString() |> convertCardToPoint); printfn "%A" card.Code), [|box card|])
     
     let className =
         match card.TypeCard with
@@ -29,7 +32,15 @@ let CardComponent (card: Card) =
     let convertBalance balance =
         "$" + balance.ToString() + ",00" + " USD"
     
+    let onMouseMove _ =
+        card.Code.ToString() |> addBackSpaceToCardCode |> setCode
+    
+    let onMouseLeave _ =
+        card.Code.ToString() |> convertCardToPoint |> setCode
+    
     Html.div [
+        prop.onMouseMove onMouseMove
+        prop.onMouseLeave onMouseLeave
         prop.className className
         prop.style [
             style.position.relative
@@ -82,7 +93,7 @@ let CardComponent (card: Card) =
                         ]
                     ]
                     Html.h1 [
-                        prop.text (card.Code.ToString() |> convertCardToPoint)
+                        prop.text code
                         prop.style [
                             style.position.absolute
                             style.right 24

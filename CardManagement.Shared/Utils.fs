@@ -2,7 +2,7 @@ module CardManagement.Shared.Utils
 
 open System
 
-let BuildApiRoute (typeName: string) (methodName: string) = 
+let buildApiRoute (typeName: string) (methodName: string) = 
     $"/api/%s{typeName}/%s{methodName}"
 
 let getStringMonth (date: DateTime) =
