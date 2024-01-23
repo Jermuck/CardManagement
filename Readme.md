@@ -39,6 +39,12 @@ https://github.com/Jermuck/CardManagement/assets/118609075/1c92b976-7da9-4284-bb
 
 
 
+https://github.com/Jermuck/CardManagement/assets/118609075/ee23ff96-a8f7-446c-94fc-cb0c4b6742c2
+
+
+
+
+
 https://github.com/Jermuck/CardManagement/assets/118609075/3f49d67f-ec10-4295-91ef-d01e5e6a8049
 
 
