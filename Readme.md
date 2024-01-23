@@ -32,10 +32,14 @@ https://github.com/Jermuck/CardManagement/assets/118609075/e48a671e-048c-4afe-b2
 
 
 
+
+https://github.com/Jermuck/CardManagement/assets/118609075/1c92b976-7da9-4284-bb3e-162ff721f522
+
+
+
+
+
 https://github.com/Jermuck/CardManagement/assets/118609075/3f49d67f-ec10-4295-91ef-d01e5e6a8049
-
-
-
 
 
 
