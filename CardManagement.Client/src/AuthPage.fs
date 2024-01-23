@@ -2,6 +2,7 @@ module CardManagement.Client.Pages.AuthPage
 
 open Feliz.Bulma
 open Feliz
+open System.Text.RegularExpressions
 open CardManagement.Client
 open CardManagement.Shared.Types
 open Inputs
@@ -15,11 +16,16 @@ let initialStateUser = { Name = ""; Surname = ""; Patronymic = ""; Password = ""
 let private validatePassword password repeatPassword =
     password = repeatPassword
 
+let validateEmail (email: string) =
+    let pattern = @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+    let regex = Regex(pattern)
+    regex.IsMatch(email)
+
 let private validateFieldsRegistrationUser (user: InputUser) repeatPassword =
     if user.Name.Length < 4 then Some "Not correct Name field"
     elif user.Surname.Length < 4 then Some "Not correct Surname field"
     elif user.Patronymic.Length < 4 then Some "Not correct Patronymic field"
-    elif user.Email.Length < 4 then Some "Not correct Email field"
+    elif not (validateEmail user.Email) then Some "Not correct Email field"
     elif user.Surname.Length < 4 then Some "Not correct Surname field"
     elif user.Password.Length < 4 then Some "Not correct Password field"
     elif not (validatePassword user.Password repeatPassword) then Some "Not equal passwords"
@@ -27,7 +33,7 @@ let private validateFieldsRegistrationUser (user: InputUser) repeatPassword =
     else None
     
 let private validateFieldsLoginUser (email: string) (password: string) repeatPassword =
-    if email.Length < 4 then Some "Not correct Email field"
+    if not (validateEmail email) then Some "Not correct Email field"
     elif password.Length < 4 then Some "Not correct Password field"
     elif not (validatePassword password repeatPassword) then Some "Not equal passwords"
     else None

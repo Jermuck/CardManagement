@@ -8,7 +8,6 @@ open CardManagement.Client
 open WebApi
 open Types
 
-[<ReactComponent>]
 let createGradient (id: string) color =
     Svg.linearGradient [
         svg.id id

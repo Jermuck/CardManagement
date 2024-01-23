@@ -25,7 +25,7 @@ let CardsPage() =
     
     let basicCard: Card = {
         Id = Guid.NewGuid()
-        Code = 1234
+        Code = int64("1234123412341234")
         CVV = 123
         UserId = Guid.NewGuid()
         TypeCard = Basic
