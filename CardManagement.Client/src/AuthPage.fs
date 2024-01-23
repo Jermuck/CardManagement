@@ -59,7 +59,6 @@ let RegistrationForm setTypeAuthorization =
     
     let next (e:Browser.Types.MouseEvent) =
         e.preventDefault()
-        setError ""
         match validateFieldsRegistrationUser user repeatPassword with
         | None -> register() |> Async.StartImmediate
         | Some msg -> setError msg
@@ -89,14 +88,14 @@ let RegistrationForm setTypeAuthorization =
                     style.fontSize 12
                 ]
                 prop.children [
-                    InputText "Your name" "Name" Text (fun v -> setUser { user with Name = v }) None
-                    InputText "Your surname" "Surname" Text (fun v -> setUser { user with Surname = v }) None
-                    InputText "Your patronymic" "Patronymic" Text (fun v -> setUser { user with Patronymic =  v }) None
-                    InputText "Your email" "Email" Text (fun v -> setUser { user with Email = v }) None
-                    InputText "Your password" "Password" Password (fun v -> setUser { user with Password = v }) None
-                    InputText "Repeat your password" "Repeat Password" Password setRepeatPassword None
-                    InputNumber "Your age" "Age" (fun v -> setUser {user with Age = v }) None
-                    InputNumber "Your salary" "Salary" (fun v -> setUser { user with Salary = v }) None
+                    InputText "Your name" "Name" Text (fun v -> setUser { user with Name = v }) (Some user.Name)
+                    InputText "Your surname" "Surname" Text (fun v -> setUser { user with Surname = v }) (Some user.Surname)
+                    InputText "Your patronymic" "Patronymic" Text (fun v -> setUser { user with Patronymic =  v }) (Some user.Patronymic)
+                    InputText "Your email" "Email" Text (fun v -> setUser { user with Email = v }) (Some user.Email)
+                    InputText "Your password" "Password" Password (fun v -> setUser { user with Password = v }) (Some user.Password)
+                    InputText "Repeat your password" "Repeat Password" Password setRepeatPassword (Some repeatPassword)
+                    InputNumber "Your age" "Age" (fun v -> setUser {user with Age = v }) (Some user.Age)
+                    InputNumber "Your salary" "Salary" (fun v -> setUser { user with Salary = v }) (Some user.Salary)
                     Html.div [
                         prop.style [
                             style.display.flex
@@ -178,9 +177,9 @@ let LoginForm setTypeAuthorization =
                     style.fontSize 12
                 ]
                 prop.children [
-                    InputText "Your email" "Email" Text setEmail None
-                    InputText "Your password" "Password" Password setPassword None
-                    InputText "Repeat your password" "Repeat Password" Password setRepeatPassword None
+                    InputText "Your email" "Email" Text setEmail (Some email)
+                    InputText "Your password" "Password" Password setPassword (Some password)
+                    InputText "Repeat your password" "Repeat Password" Password setRepeatPassword (Some repeatPassword)
                     Html.div [
                         prop.style [
                             style.display.flex

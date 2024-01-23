@@ -72,6 +72,7 @@ let TransactionModalComponent cardId cardComponent (onClick: ITransactionModalCo
                                     Bulma.control.div [
                                         Bulma.input.number [
                                             prop.placeholder "from 10$ to 99 999$"
+                                            prop.value amount
                                             prop.onChange setAmount
                                         ]
                                     ]
@@ -90,6 +91,7 @@ let TransactionModalComponent cardId cardComponent (onClick: ITransactionModalCo
                                     prop.placeholder "Message to the recipient"
                                     prop.className "h-24"
                                     prop.onChange setMessage
+                                    prop.value message
                                     textarea.bordered
                                 ]
                             ]

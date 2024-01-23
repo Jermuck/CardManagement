@@ -1,5 +1,6 @@
 module CardManagement.Client.HomeBodyComponent
 
+open Fable.Import
 open Feliz
 open Feliz.Bulma
 open Feliz.Router

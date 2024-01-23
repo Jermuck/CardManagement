@@ -49,7 +49,7 @@ let TransactionsTableComponent cardId =
         | false -> "-$" + sum.ToString() + ",00"
     
     let convertMessage (message: string) =
-        if message.Length > 10 then message[0..12] + "..."
+        if message.Length > 10 then message[0..20] + "..."
         else if message.Length = 0 then "None"
         else message
     
