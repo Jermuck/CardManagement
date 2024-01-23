@@ -15,16 +15,6 @@
   <li>Feliz.Bulma</li>
   <li>Feliz.DaisyUI</li>
 </ul>
-<h1>Frontend pages</h1>
-<p>Authorization:</p>
-<img src="./images/Authorization Page 1.png"/>
-<img src="./images/Authorization Page 2.png"/>
-<p>Home:</p>
-<img src="./images/Home Page.png"/>
-<p>Settings:</p>
-<img src="./images/Settings Page.png"/>
-<p>Create card:</p>
-<img src="./images/Cards Page.png"/>
 <h1>Demonstration:</h1>
 
 
