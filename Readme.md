@@ -26,6 +26,10 @@
 <p>Create card:</p>
 <img src="./images/Cards Page.png"/>
 <h1>Demonstration:</h1>
+
+
+
+
 https://github.com/Jermuck/CardManagement/assets/118609075/e1f49133-24b2-4e73-a4d4-13a8ff3570e0
 
 
