@@ -15,6 +15,8 @@
   <li>Feliz.Bulma</li>
   <li>Feliz.DaisyUI</li>
 </ul>
+<h1>Demonstration:</h1>
+https://github.com/Jermuck/CardManagement/assets/118609075/e1f49133-24b2-4e73-a4d4-13a8ff3570e0
 <h1>Frontend pages</h1>
 <p>Authorization:</p>
 <img src="./images/Authorization Page 1.png"/>
@@ -25,3 +27,6 @@
 <img src="./images/Settings Page.png"/>
 <p>Create card:</p>
 <img src="./images/Cards Page.png"/>
+
+
+
