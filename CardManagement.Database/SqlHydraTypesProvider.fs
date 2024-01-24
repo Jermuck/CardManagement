@@ -293,4 +293,3 @@ type HydraReader(reader: Npgsql.NpgsqlDataReader) =
             let readEntityFn = t |> buildEntityReadFn
             fun () -> 
                 readEntityFn() :?> 'T
-        

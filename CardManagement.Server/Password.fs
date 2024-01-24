@@ -66,3 +66,4 @@ let verifyPassword hash password =
     Buffer.BlockCopy(hashedPassword, 13 + currentSalt.Length, expectedSubKey, 0, expectedSubKey.Length)
     let actualSubKey = KeyDerivation.Pbkdf2(password, currentSalt, prf, iterCount, subKeyLength)
     bytesAreEqual actualSubKey expectedSubKey
+    

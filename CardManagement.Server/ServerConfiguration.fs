@@ -57,3 +57,4 @@ let configureServices (services: IServiceCollection) =
                  )
              ) |> ignore
     services.AddGiraffe() |> ignore
+    

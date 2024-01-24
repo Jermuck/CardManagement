@@ -109,3 +109,4 @@ let mapDBTransactionToDomain transaction =
         CreateDate = time
         Message = transaction.message 
     }
+    
